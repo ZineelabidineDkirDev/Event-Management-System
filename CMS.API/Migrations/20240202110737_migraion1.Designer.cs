@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240202084438_Initial")]
-    partial class Initial
+    [Migration("20240202110737_migraion1")]
+    partial class migraion1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
