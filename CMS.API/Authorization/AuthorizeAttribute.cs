@@ -1,45 +1,43 @@
-﻿using CMS.API.Entities;
-using Microsoft.AspNetCore.Mvc.Filters;
+﻿namespace CMS.API.Authorization;
+
+using CMS.API.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Http;
+using CMS.API.Models.Accounts;
 
-namespace CMS.API.Authorization
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+public class AuthorizeAttribute : Attribute, IAuthorizationFilter
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class AuthorizeAttribute : Attribute, IAuthorizationFilter
-    {
-        private readonly IList<Role> _roles;
+    private readonly IList<Role> _roles;
 
-        public AuthorizeAttribute(params Role[] roles)
+    public AuthorizeAttribute(params Role[] roles)
+    {
+        _roles = roles ?? new Role[] { };
+    }
+
+    public void OnAuthorization(AuthorizationFilterContext context)
+    {
+        var allowAnonymous = context.ActionDescriptor.EndpointMetadata.OfType<AllowAnonymousAttribute>().Any();
+        if (allowAnonymous)
+            return;
+
+        var accountResponse = context.HttpContext.Items["Account"] as AccountResponse;
+
+        if (accountResponse == null)
         {
-            _roles = roles;
+            context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
+            return;
         }
 
-        public void OnAuthorization(AuthorizationFilterContext context)
+        var account = new Account
         {
-            var allowAnonymous = context.ActionDescriptor.EndpointMetadata.OfType<AllowAnonymousAttribute>().Any();
-            if (allowAnonymous)
-                return;
+            Id = accountResponse.Id,
+        };
 
-            var account = (Account)context.HttpContext.Items["Account"];
-
-            if (account == null)
-            {
-                context.Result = new JsonResult(new { message = "Unauthorized: User not authenticated" })
-                {
-                    StatusCode = StatusCodes.Status401Unauthorized
-                };
-                return;
-            }
-
-            if (_roles.Any() && !_roles.Contains(account.Role))
-            {
-                context.Result = new JsonResult(new { message = "Unauthorized: Insufficient role permissions" })
-                {
-                    StatusCode = StatusCodes.Status403Forbidden
-                };
-                return;
-            }
+        if (_roles.Any() && !_roles.Contains(account.Role))
+        {
+            context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
         }
     }
 }

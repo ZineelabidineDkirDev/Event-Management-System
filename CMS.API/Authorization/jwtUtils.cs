@@ -1,20 +1,14 @@
-﻿using CMS.API.Entities;
+﻿namespace CMS.API.Authorization;
+
 using CMS.API.Helpers;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
-
-namespace CMS.API.Authorization;
-
-public interface IJwtUtils
-{
-    public string GenerateJwtToken(Account account);
-    public int? ValidateJwtToken(string token);
-    public RefreshToken GenerateRefreshToken(string ipAddress);
-}
+using CMS.API.Entities;
+using System.Security.Cryptography;
+using CMS.API.Contracts;
 
 public class JwtUtils : IJwtUtils
 {
@@ -56,7 +50,7 @@ public class JwtUtils : IJwtUtils
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateIssuer = true,
+                ValidateIssuer = false,
                 ValidateAudience = false,
                 ClockSkew = TimeSpan.Zero
             }, out SecurityToken validatedToken);
@@ -81,7 +75,6 @@ public class JwtUtils : IJwtUtils
             Created = DateTime.UtcNow,
             CreatedByIp = ipAddress
         };
-
         var tokenIsUnique = !_context.Accounts.Any(a => a.RefreshTokens.Any(t => t.Token == refreshToken.Token));
 
         if (!tokenIsUnique)

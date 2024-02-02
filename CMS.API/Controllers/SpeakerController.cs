@@ -2,7 +2,6 @@
 using CMS.API.Contracts;
 using CMS.API.DTOs;
 using CMS.API.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CMS.API.Controllers

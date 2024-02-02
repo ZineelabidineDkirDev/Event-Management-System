@@ -1,4 +1,6 @@
-﻿using CMS.API.Authorization;
+﻿namespace CMS.API.Authorization;
+
+using CMS.API.Contracts;
 using CMS.API.Helpers;
 using Microsoft.Extensions.Options;
 
@@ -13,23 +15,13 @@ public class JwtMiddleware
         _appSettings = appSettings.Value;
     }
 
-    public async Task Invoke(HttpContext context, DataContext dataContext, IJwtUtils jwtUtils)
+    public async Task Invoke(HttpContext context, IAccountService accountService, IJwtUtils jwtUtils)
     {
         var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
         var accountId = jwtUtils.ValidateJwtToken(token);
-
         if (accountId != null)
         {
-            var account = await dataContext.Accounts.FindAsync(accountId.Value);
-
-            if (account != null)
-            {
-                context.Items["Account"] = account;
-            }
-            else
-            {
-                Console.WriteLine($"Account with ID {accountId} not found.");
-            }
+            context.Items["Account"] = accountService.GetById(accountId.Value);
         }
 
         await _next(context);

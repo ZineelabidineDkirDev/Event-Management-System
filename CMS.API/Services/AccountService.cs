@@ -21,7 +21,6 @@ namespace CMS.API.Services
         private readonly IMapper _mapper;
         private readonly AppSettings _appSettings;
         private readonly IEmailService _emailService;
-        private string Email { get; set; }
 
         public AccountService(
             DataContext context,
@@ -30,11 +29,11 @@ namespace CMS.API.Services
             IOptions<AppSettings> appSettings,
             IEmailService emailService)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-            _jwtUtils = jwtUtils ?? throw new ArgumentNullException(nameof(jwtUtils));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _appSettings = appSettings?.Value ?? throw new ArgumentNullException(nameof(appSettings));
-            _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
+            _context = context;
+            _jwtUtils = jwtUtils;
+            _mapper = mapper;
+            _appSettings = appSettings.Value;
+            _emailService = emailService;
         }
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model, string ipAddress)
@@ -45,19 +44,28 @@ namespace CMS.API.Services
                 throw new AppException("Email or password is incorrect");
 
             var jwtToken = _jwtUtils.GenerateJwtToken(account);
+
             var refreshToken = _jwtUtils.GenerateRefreshToken(ipAddress);
+
+            refreshToken.ReplacedByToken = string.Empty;
+            refreshToken.RevokedByIp = "non_null_value";
             account.RefreshTokens.Add(refreshToken);
 
             removeOldRefreshTokens(account);
 
-            SaveChangesAndHandleErrors(nameof(Authenticate), account, false);
+            refreshToken.ReasonRevoked = string.Empty;
+
+            _context.Update(account);
+            _context.SaveChanges();
 
             var response = _mapper.Map<AuthenticateResponse>(account);
             response.JwtToken = jwtToken;
             response.RefreshToken = refreshToken.Token;
             return response;
         }
-        
+
+
+
         public AuthenticateResponse RefreshToken(string token, string ipAddress)
         {
             var account = getAccountByRefreshToken(token);
@@ -66,7 +74,8 @@ namespace CMS.API.Services
             if (refreshToken.IsRevoked)
             {
                 revokeDescendantRefreshTokens(refreshToken, account, ipAddress, $"Attempted reuse of revoked ancestor token: {token}");
-                SaveChangesAndHandleErrors(nameof(RefreshToken), account);
+                _context.Update(account);
+                _context.SaveChanges();
             }
 
             if (!refreshToken.IsActive)
@@ -75,9 +84,11 @@ namespace CMS.API.Services
             var newRefreshToken = rotateRefreshToken(refreshToken, ipAddress);
             account.RefreshTokens.Add(newRefreshToken);
 
+
             removeOldRefreshTokens(account);
 
-            SaveChangesAndHandleErrors(nameof(RefreshToken), account);
+            _context.Update(account);
+            _context.SaveChanges();
 
             var jwtToken = _jwtUtils.GenerateJwtToken(account);
 
@@ -85,49 +96,6 @@ namespace CMS.API.Services
             response.JwtToken = jwtToken;
             response.RefreshToken = newRefreshToken.Token;
             return response;
-        }
-
-        private void SaveChangesAndHandleErrors(string methodName, Account account, bool saveChanges = true)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(account.VerificationToken))
-                {
-                    account.VerificationToken = generateVerificationToken();
-                }
-
-                if (account.RefreshTokens != null)
-                {
-                    foreach (var refreshToken in account.RefreshTokens)
-                    {
-                        if (refreshToken != null && refreshToken.ReasonRevoked == null)
-                        {
-                            refreshToken.ReasonRevoked = "DefaultReason";
-                        }
-                    }
-                }
-
-                if (saveChanges)
-                {
-                    _context.SaveChanges();
-                }
-            }
-            catch (DbUpdateException ex)
-            {
-                Console.WriteLine($"Update error in {methodName}: {ex.Message}");
-                LogInnerExceptionDetails(ex);
-                throw;
-            }
-        }
-
-        private void LogInnerExceptionDetails(Exception ex)
-        {
-            while (ex.InnerException != null)
-            {
-                Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
-                Console.WriteLine($"Inner Exception Stack Trace: {ex.InnerException.StackTrace}");
-                ex = ex.InnerException;
-            }
         }
 
         public void RevokeToken(string token, string ipAddress)
@@ -139,10 +107,8 @@ namespace CMS.API.Services
                 throw new AppException("Invalid token");
 
             revokeRefreshToken(refreshToken, ipAddress, "Revoked without replacement");
-
-            _context.Entry(account).State = EntityState.Modified;
-
-            SaveChangesAndHandleErrors(nameof(RevokeToken), account);
+            _context.Update(account);
+            _context.SaveChanges();
         }
 
         public void Register(RegisterRequest model, string origin)
@@ -156,21 +122,19 @@ namespace CMS.API.Services
             var account = _mapper.Map<Account>(model);
 
             var isFirstAccount = _context.Accounts.Count() == 0;
-            Email = account.Email;
             account.Role = isFirstAccount ? Role.Admin : Role.Participant;
             account.Created = DateTime.UtcNow;
             account.VerificationToken = generateVerificationToken();
+            account.ResetToken = generateResetToken(); 
+
             account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
 
-            account.ResetToken = generateResetToken();
-            account.ResetTokenExpires = DateTime.UtcNow.AddDays(1);
-
             _context.Accounts.Add(account);
-
-            _context.SaveChanges(); 
+            _context.SaveChanges();
 
             sendVerificationEmail(account, origin);
         }
+
 
         public void VerifyEmail(string token)
         {
@@ -180,13 +144,12 @@ namespace CMS.API.Services
                 throw new AppException("Verification failed");
 
             account.Verified = DateTime.UtcNow;
-            account.VerificationToken = null;
+            account.VerificationToken = generateVerificationToken();
 
-            //_context.SaveChanges(); // Save changes to the database
-
-            // Optionally, you can handle any errors that occur during the saving process
-             SaveChangesAndHandleErrors(nameof(VerifyEmail), account);
+            _context.Accounts.Update(account);
+            _context.SaveChanges();
         }
+
 
         public void ForgotPassword(ForgotPasswordRequest model, string origin)
         {
@@ -198,8 +161,7 @@ namespace CMS.API.Services
             account.ResetTokenExpires = DateTime.UtcNow.AddDays(1);
 
             _context.Accounts.Update(account);
-
-            SaveChangesAndHandleErrors(nameof(ForgotPassword), account);
+            _context.SaveChanges();
 
             sendPasswordResetEmail(account, origin);
         }
@@ -215,13 +177,13 @@ namespace CMS.API.Services
 
             account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
             account.PasswordReset = DateTime.UtcNow;
-            account.ResetToken = null;
+            account.ResetToken = generateResetToken();
             account.ResetTokenExpires = null;
 
             _context.Accounts.Update(account);
-
-            SaveChangesAndHandleErrors(nameof(ResetPassword), account);
+            _context.SaveChanges();
         }
+
 
         public IEnumerable<AccountResponse> GetAll()
         {
@@ -243,11 +205,11 @@ namespace CMS.API.Services
             var account = _mapper.Map<Account>(model);
             account.Created = DateTime.UtcNow;
             account.Verified = DateTime.UtcNow;
+
             account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
 
             _context.Accounts.Add(account);
-
-            SaveChangesAndHandleErrors(nameof(Create), account);
+            _context.SaveChanges();
 
             return _mapper.Map<AccountResponse>(account);
         }
@@ -265,8 +227,7 @@ namespace CMS.API.Services
             _mapper.Map(model, account);
             account.Updated = DateTime.UtcNow;
             _context.Accounts.Update(account);
-
-            SaveChangesAndHandleErrors(nameof(Update), account);
+            _context.SaveChanges();
 
             return _mapper.Map<AccountResponse>(account);
         }
@@ -275,8 +236,7 @@ namespace CMS.API.Services
         {
             var account = getAccount(id);
             _context.Accounts.Remove(account);
-
-            SaveChangesAndHandleErrors(nameof(Delete), account);
+            _context.SaveChanges();
         }
 
         private Account getAccount(int id)

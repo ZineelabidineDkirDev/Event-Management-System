@@ -22,7 +22,6 @@ try
     builder.Logging.AddConsole();   
     builder.Logging.AddDebug();
 
-    // Add services to DI container
     var services = builder.Services;
     var env = builder.Environment;
 
@@ -34,17 +33,14 @@ try
     });
     services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-    // Add Swagger services
     services.AddSwaggerGen(c =>
     {
         c.SwaggerDoc("v1", new OpenApiInfo { Title = "MMC APIs", Version = "v1" });
     });
 
-    // Configure strongly typed settings object
     services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
     services.AddAutoMapper(typeof(MappingProfile));
 
-    // Configure DI for application services
     services.AddScoped<IJwtUtils, JwtUtils>();
     services.AddScoped<IAccountService, AccountService>();
     services.AddScoped<IEmailService, EmailService>();
@@ -75,12 +71,8 @@ try
         .AllowAnyHeader()
         .AllowCredentials());
 
-    // Use custom error handling middleware
     app.UseMiddleware<ErrorHandlerMiddleware>();
 
-
-
-    // Use JwtMiddleware before authorization
     app.UseMiddleware<JwtMiddleware>();
 
     app.UseAuthentication();
