@@ -95,7 +95,7 @@ namespace CMS.API.Controllers
             return Ok(new { message = "Password reset successful, you can now login" });
         }
 
-        [Authorize(Role.Admin)]
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public ActionResult<IEnumerable<AccountResponse>> GetAll()
         {

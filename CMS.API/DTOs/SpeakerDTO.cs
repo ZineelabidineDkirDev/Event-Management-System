@@ -4,6 +4,7 @@ namespace CMS.API.DTOs
 {
     public class SpeakerDTO
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         [NotMapped]
         public IFormFile Image { get; set; }

@@ -12,7 +12,7 @@ namespace CMS.API.Authorization
 
         public AuthorizeAttribute(params Role[] roles)
         {
-            _roles = roles ?? new Role[] { };
+            _roles = roles;
         }
 
         public void OnAuthorization(AuthorizationFilterContext context)
@@ -34,7 +34,6 @@ namespace CMS.API.Authorization
 
             if (_roles.Any() && !_roles.Contains(account.Role))
             {
-                // User doesn't have the required role
                 context.Result = new JsonResult(new { message = "Unauthorized: Insufficient role permissions" })
                 {
                     StatusCode = StatusCodes.Status403Forbidden
