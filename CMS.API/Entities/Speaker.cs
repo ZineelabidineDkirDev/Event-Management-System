@@ -4,6 +4,7 @@ using System.Diagnostics.Eventing.Reader;
 
 namespace CMS.API.Entities
 {
+    [Table("Speakers")]
     public class Speaker
     {
         [Key]

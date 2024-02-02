@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CMS.API.Entities
 {
+    [Table("Presentations")]
     public class Presentation
     {
         [Key]

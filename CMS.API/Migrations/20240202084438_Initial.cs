@@ -81,6 +81,21 @@ namespace CMS.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Payments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TypePayement = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TypePlan = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TicketPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Payments", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Speakers",
                 columns: table => new
                 {
@@ -137,7 +152,7 @@ namespace CMS.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RefreshToken",
+                name: "RefreshTokens",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -154,9 +169,9 @@ namespace CMS.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RefreshToken", x => x.Id);
+                    table.PrimaryKey("PK_RefreshTokens", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RefreshToken_Accounts_AccountId",
+                        name: "FK_RefreshTokens_Accounts_AccountId",
                         column: x => x.AccountId,
                         principalTable: "Accounts",
                         principalColumn: "Id",
@@ -164,7 +179,7 @@ namespace CMS.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Planner",
+                name: "Planners",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -183,9 +198,9 @@ namespace CMS.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Planner", x => x.Id);
+                    table.PrimaryKey("PK_Planners", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Planner_Events_EventId",
+                        name: "FK_Planners_Events_EventId",
                         column: x => x.EventId,
                         principalTable: "Events",
                         principalColumn: "Id",
@@ -221,9 +236,9 @@ namespace CMS.API.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_EventAttendances_Planner_PlannerId",
+                        name: "FK_EventAttendances_Planners_PlannerId",
                         column: x => x.PlannerId,
-                        principalTable: "Planner",
+                        principalTable: "Planners",
                         principalColumn: "Id");
                 });
 
@@ -253,9 +268,9 @@ namespace CMS.API.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EventCategories_Planner_PlannerId",
+                        name: "FK_EventCategories_Planners_PlannerId",
                         column: x => x.PlannerId,
-                        principalTable: "Planner",
+                        principalTable: "Planners",
                         principalColumn: "Id");
                 });
 
@@ -285,14 +300,14 @@ namespace CMS.API.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PartnerEvents_Planner_PlannerId",
+                        name: "FK_PartnerEvents_Planners_PlannerId",
                         column: x => x.PlannerId,
-                        principalTable: "Planner",
+                        principalTable: "Planners",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "PlannerSpeaker",
+                name: "PlannerSpeakers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -302,15 +317,15 @@ namespace CMS.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlannerSpeaker", x => x.Id);
+                    table.PrimaryKey("PK_PlannerSpeakers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PlannerSpeaker_Planner_PlannerId",
+                        name: "FK_PlannerSpeakers_Planners_PlannerId",
                         column: x => x.PlannerId,
-                        principalTable: "Planner",
+                        principalTable: "Planners",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PlannerSpeaker_Speakers_SpeakerId",
+                        name: "FK_PlannerSpeakers_Speakers_SpeakerId",
                         column: x => x.SpeakerId,
                         principalTable: "Speakers",
                         principalColumn: "Id",
@@ -340,9 +355,9 @@ namespace CMS.API.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Presentations_Planner_PlannerId",
+                        name: "FK_Presentations_Planners_PlannerId",
                         column: x => x.PlannerId,
-                        principalTable: "Planner",
+                        principalTable: "Planners",
                         principalColumn: "Id");
                 });
 
@@ -366,9 +381,9 @@ namespace CMS.API.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SponsorEvents_Planner_PlannerId",
+                        name: "FK_SponsorEvents_Planners_PlannerId",
                         column: x => x.PlannerId,
-                        principalTable: "Planner",
+                        principalTable: "Planners",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_SponsorEvents_Sponsors_SponsorId1",
@@ -429,18 +444,18 @@ namespace CMS.API.Migrations
                 column: "PlannerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Planner_EventId",
-                table: "Planner",
+                name: "IX_Planners_EventId",
+                table: "Planners",
                 column: "EventId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PlannerSpeaker_PlannerId",
-                table: "PlannerSpeaker",
+                name: "IX_PlannerSpeakers_PlannerId",
+                table: "PlannerSpeakers",
                 column: "PlannerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PlannerSpeaker_SpeakerId",
-                table: "PlannerSpeaker",
+                name: "IX_PlannerSpeakers_SpeakerId",
+                table: "PlannerSpeakers",
                 column: "SpeakerId");
 
             migrationBuilder.CreateIndex(
@@ -454,8 +469,8 @@ namespace CMS.API.Migrations
                 column: "PlannerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RefreshToken_AccountId",
-                table: "RefreshToken",
+                name: "IX_RefreshTokens_AccountId",
+                table: "RefreshTokens",
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
@@ -490,13 +505,16 @@ namespace CMS.API.Migrations
                 name: "PartnerEvents");
 
             migrationBuilder.DropTable(
-                name: "PlannerSpeaker");
+                name: "Payments");
+
+            migrationBuilder.DropTable(
+                name: "PlannerSpeakers");
 
             migrationBuilder.DropTable(
                 name: "Presentations");
 
             migrationBuilder.DropTable(
-                name: "RefreshToken");
+                name: "RefreshTokens");
 
             migrationBuilder.DropTable(
                 name: "SponsorEvents");
@@ -511,7 +529,7 @@ namespace CMS.API.Migrations
                 name: "Speakers");
 
             migrationBuilder.DropTable(
-                name: "Planner");
+                name: "Planners");
 
             migrationBuilder.DropTable(
                 name: "Sponsors");

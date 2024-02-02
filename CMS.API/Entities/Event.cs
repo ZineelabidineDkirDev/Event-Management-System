@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CMS.API.Entities
 {
+    [Table("Events")]
     public class Event
     {
         [Key]

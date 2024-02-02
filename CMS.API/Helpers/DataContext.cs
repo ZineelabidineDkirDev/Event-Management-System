@@ -35,6 +35,21 @@ public class DataContext : DbContext
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Account>().ToTable("Accounts");
+        modelBuilder.Entity<ApplicationSettings>().ToTable("ApplicationSettings");
+        modelBuilder.Entity<Category>().ToTable("Categories");
+        modelBuilder.Entity<Event>().ToTable("Events");
+        modelBuilder.Entity<EventAttendance>().ToTable("EventAttendances");
+        modelBuilder.Entity<EventCategory>().ToTable("EventCategories");
+        modelBuilder.Entity<Partner>().ToTable("Partners");
+        modelBuilder.Entity<PartnerEvent>().ToTable("PartnerEvents");
+        modelBuilder.Entity<Presentation>().ToTable("Presentations");
+        modelBuilder.Entity<Speaker>().ToTable("Speakers");
+        modelBuilder.Entity<Payement>().ToTable("Payments");
+        modelBuilder.Entity<Planner>().ToTable("Planners");
+        modelBuilder.Entity<PlannerSpeaker>().ToTable("PlannerSpeakers");
+        modelBuilder.Entity<Sponsor>().ToTable("Sponsors");
+        modelBuilder.Entity<SponsorEvent>().ToTable("SponsorEvents");
         modelBuilder.Entity<EventAttendance>()
             .HasOne(ea => ea.Event)
             .WithMany(e => e.Attendances)

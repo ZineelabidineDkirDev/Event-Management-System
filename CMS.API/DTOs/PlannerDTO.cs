@@ -12,5 +12,6 @@
         public int MaxAttendees { get; set; }
         public bool IsActive { get; set; }
         public int OrganizerId { get; set; }
+        public int EventId { get; set; }
     }
 }

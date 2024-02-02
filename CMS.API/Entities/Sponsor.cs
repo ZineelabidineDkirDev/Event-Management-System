@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CMS.API.Entities
 {
+    [Table("Sponsors")]
     public class Sponsor
     {
         [Key]

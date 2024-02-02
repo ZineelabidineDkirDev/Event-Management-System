@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240201233801_Initial")]
+    [Migration("20240202084438_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -84,7 +84,7 @@ namespace CMS.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Accounts");
+                    b.ToTable("Accounts", (string)null);
                 });
 
             modelBuilder.Entity("CMS.API.Entities.ApplicationSettings", b =>
@@ -105,7 +105,7 @@ namespace CMS.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ApplicationSettings");
+                    b.ToTable("ApplicationSettings", (string)null);
                 });
 
             modelBuilder.Entity("CMS.API.Entities.Category", b =>
@@ -126,7 +126,7 @@ namespace CMS.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("CMS.API.Entities.Event", b =>
@@ -152,7 +152,7 @@ namespace CMS.API.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.ToTable("Events");
+                    b.ToTable("Events", (string)null);
                 });
 
             modelBuilder.Entity("CMS.API.Entities.EventAttendance", b =>
@@ -189,7 +189,7 @@ namespace CMS.API.Migrations
 
                     b.HasIndex("PlannerId");
 
-                    b.ToTable("EventAttendances");
+                    b.ToTable("EventAttendances", (string)null);
                 });
 
             modelBuilder.Entity("CMS.API.Entities.EventCategory", b =>
@@ -217,7 +217,7 @@ namespace CMS.API.Migrations
 
                     b.HasIndex("PlannerId");
 
-                    b.ToTable("EventCategories");
+                    b.ToTable("EventCategories", (string)null);
                 });
 
             modelBuilder.Entity("CMS.API.Entities.Partner", b =>
@@ -242,7 +242,7 @@ namespace CMS.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Partners");
+                    b.ToTable("Partners", (string)null);
                 });
 
             modelBuilder.Entity("CMS.API.Entities.PartnerEvent", b =>
@@ -270,7 +270,31 @@ namespace CMS.API.Migrations
 
                     b.HasIndex("PlannerId");
 
-                    b.ToTable("PartnerEvents");
+                    b.ToTable("PartnerEvents", (string)null);
+                });
+
+            modelBuilder.Entity("CMS.API.Entities.Payement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("TicketPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("TypePayement")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TypePlan")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("CMS.API.Entities.Planner", b =>
@@ -322,7 +346,7 @@ namespace CMS.API.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("Planner");
+                    b.ToTable("Planners", (string)null);
                 });
 
             modelBuilder.Entity("CMS.API.Entities.PlannerSpeaker", b =>
@@ -345,7 +369,7 @@ namespace CMS.API.Migrations
 
                     b.HasIndex("SpeakerId");
 
-                    b.ToTable("PlannerSpeaker");
+                    b.ToTable("PlannerSpeakers", (string)null);
                 });
 
             modelBuilder.Entity("CMS.API.Entities.Presentation", b =>
@@ -383,7 +407,7 @@ namespace CMS.API.Migrations
 
                     b.HasIndex("PlannerId");
 
-                    b.ToTable("Presentations");
+                    b.ToTable("Presentations", (string)null);
                 });
 
             modelBuilder.Entity("CMS.API.Entities.Speaker", b =>
@@ -427,7 +451,7 @@ namespace CMS.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Speakers");
+                    b.ToTable("Speakers", (string)null);
                 });
 
             modelBuilder.Entity("CMS.API.Entities.Sponsor", b =>
@@ -456,7 +480,7 @@ namespace CMS.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sponsors");
+                    b.ToTable("Sponsors", (string)null);
                 });
 
             modelBuilder.Entity("CMS.API.Entities.SponsorEvent", b =>
@@ -484,7 +508,7 @@ namespace CMS.API.Migrations
 
                     b.HasIndex("SponsorId1");
 
-                    b.ToTable("SponsorEvents");
+                    b.ToTable("SponsorEvents", (string)null);
                 });
 
             modelBuilder.Entity("CMS.API.Entities.Account", b =>
@@ -533,7 +557,7 @@ namespace CMS.API.Migrations
 
                             b1.HasIndex("AccountId");
 
-                            b1.ToTable("RefreshToken");
+                            b1.ToTable("RefreshTokens");
 
                             b1.WithOwner("Account")
                                 .HasForeignKey("AccountId");

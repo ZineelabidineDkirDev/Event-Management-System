@@ -1,5 +1,8 @@
-﻿namespace CMS.API.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
+namespace CMS.API.Entities;
+
+[Table("Accounts")]
 public class Account
 {
     public int Id { get; set; }
