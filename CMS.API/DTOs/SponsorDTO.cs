@@ -1,9 +1,12 @@
-﻿namespace CMS.API.DTOs
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace CMS.API.DTOs
 {
     public class SponsorDTO
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public string LogoUrl { get; set; }
+        [NotMapped]
+        public IFormFile Logo { get; set; }
     }
 }

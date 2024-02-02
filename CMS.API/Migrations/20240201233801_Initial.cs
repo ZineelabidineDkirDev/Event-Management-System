@@ -81,14 +81,35 @@ namespace CMS.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Speakers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Company = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Position = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LinkedInProfile = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TwitterProfile = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DesactivateAccount = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Speakers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Sponsors",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LogoUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    LogoName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -103,17 +124,6 @@ namespace CMS.API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImageName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StartDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Horizontal = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Vertical = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsOnline = table.Column<bool>(type: "bit", nullable: false),
-                    TicketPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    MaxAttendees = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    OrganizerId = table.Column<int>(type: "int", nullable: false),
                     AccountId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -154,44 +164,82 @@ namespace CMS.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EventAttendances",
+                name: "Planner",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EventId = table.Column<int>(type: "int", nullable: false),
-                    RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    HasAttended = table.Column<bool>(type: "bit", nullable: false),
-                    AccountId = table.Column<int>(type: "int", nullable: true)
+                    StartDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Horizontal = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Vertical = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsOnline = table.Column<bool>(type: "bit", nullable: false),
+                    MaxAttendees = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    OrganizerId = table.Column<int>(type: "int", nullable: false),
+                    EventId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EventAttendances", x => x.UserId);
+                    table.PrimaryKey("PK_Planner", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Planner_Events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Events",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EventAttendances",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ParticipantId = table.Column<int>(type: "int", nullable: false),
+                    AccountId = table.Column<int>(type: "int", nullable: false),
+                    EventId = table.Column<int>(type: "int", nullable: false),
+                    RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    HasAttended = table.Column<bool>(type: "bit", nullable: false),
+                    PlannerId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EventAttendances", x => x.Id);
                     table.ForeignKey(
                         name: "FK_EventAttendances_Accounts_AccountId",
                         column: x => x.AccountId,
                         principalTable: "Accounts",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_EventAttendances_Events_EventId",
                         column: x => x.EventId,
                         principalTable: "Events",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_EventAttendances_Planner_PlannerId",
+                        column: x => x.PlannerId,
+                        principalTable: "Planner",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "EventCategories",
                 columns: table => new
                 {
-                    EventId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EventId1 = table.Column<int>(type: "int", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                    EventId = table.Column<int>(type: "int", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    PlannerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EventCategories", x => x.EventId);
+                    table.PrimaryKey("PK_EventCategories", x => x.Id);
                     table.ForeignKey(
                         name: "FK_EventCategories_Categories_CategoryId",
                         column: x => x.CategoryId,
@@ -199,25 +247,31 @@ namespace CMS.API.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EventCategories_Events_EventId1",
-                        column: x => x.EventId1,
+                        name: "FK_EventCategories_Events_EventId",
+                        column: x => x.EventId,
                         principalTable: "Events",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EventCategories_Planner_PlannerId",
+                        column: x => x.PlannerId,
+                        principalTable: "Planner",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "PartnerEvents",
                 columns: table => new
                 {
-                    PartnerId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PartnerId1 = table.Column<int>(type: "int", nullable: false),
-                    EventId = table.Column<int>(type: "int", nullable: false)
+                    PartnerId = table.Column<int>(type: "int", nullable: false),
+                    EventId = table.Column<int>(type: "int", nullable: false),
+                    PlannerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PartnerEvents", x => x.PartnerId);
+                    table.PrimaryKey("PK_PartnerEvents", x => x.Id);
                     table.ForeignKey(
                         name: "FK_PartnerEvents_Events_EventId",
                         column: x => x.EventId,
@@ -225,9 +279,40 @@ namespace CMS.API.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PartnerEvents_Partners_PartnerId1",
-                        column: x => x.PartnerId1,
+                        name: "FK_PartnerEvents_Partners_PartnerId",
+                        column: x => x.PartnerId,
                         principalTable: "Partners",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PartnerEvents_Planner_PlannerId",
+                        column: x => x.PlannerId,
+                        principalTable: "Planner",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PlannerSpeaker",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SpeakerId = table.Column<int>(type: "int", nullable: false),
+                    PlannerId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlannerSpeaker", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PlannerSpeaker_Planner_PlannerId",
+                        column: x => x.PlannerId,
+                        principalTable: "Planner",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PlannerSpeaker_Speakers_SpeakerId",
+                        column: x => x.SpeakerId,
+                        principalTable: "Speakers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -242,7 +327,8 @@ namespace CMS.API.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DurationMinutes = table.Column<int>(type: "int", nullable: false),
                     SlideUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EventId = table.Column<int>(type: "int", nullable: false)
+                    EventId = table.Column<int>(type: "int", nullable: false),
+                    PlannerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -253,31 +339,11 @@ namespace CMS.API.Migrations
                         principalTable: "Events",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Speakers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Bio = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Company = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Position = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LinkedInProfile = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TwitterProfile = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EventId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Speakers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Speakers_Events_EventId",
-                        column: x => x.EventId,
-                        principalTable: "Events",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Presentations_Planner_PlannerId",
+                        column: x => x.PlannerId,
+                        principalTable: "Planner",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -287,7 +353,8 @@ namespace CMS.API.Migrations
                     SponsorId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SponsorId1 = table.Column<int>(type: "int", nullable: false),
-                    EventId = table.Column<int>(type: "int", nullable: false)
+                    EventId = table.Column<int>(type: "int", nullable: false),
+                    PlannerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -298,6 +365,11 @@ namespace CMS.API.Migrations
                         principalTable: "Events",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SponsorEvents_Planner_PlannerId",
+                        column: x => x.PlannerId,
+                        principalTable: "Planner",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_SponsorEvents_Sponsors_SponsorId1",
                         column: x => x.SponsorId1,
@@ -317,14 +389,24 @@ namespace CMS.API.Migrations
                 column: "EventId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_EventAttendances_PlannerId",
+                table: "EventAttendances",
+                column: "PlannerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_EventCategories_CategoryId",
                 table: "EventCategories",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EventCategories_EventId1",
+                name: "IX_EventCategories_EventId",
                 table: "EventCategories",
-                column: "EventId1");
+                column: "EventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EventCategories_PlannerId",
+                table: "EventCategories",
+                column: "PlannerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_AccountId",
@@ -337,9 +419,29 @@ namespace CMS.API.Migrations
                 column: "EventId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PartnerEvents_PartnerId1",
+                name: "IX_PartnerEvents_PartnerId",
                 table: "PartnerEvents",
-                column: "PartnerId1");
+                column: "PartnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PartnerEvents_PlannerId",
+                table: "PartnerEvents",
+                column: "PlannerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Planner_EventId",
+                table: "Planner",
+                column: "EventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlannerSpeaker_PlannerId",
+                table: "PlannerSpeaker",
+                column: "PlannerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlannerSpeaker_SpeakerId",
+                table: "PlannerSpeaker",
+                column: "SpeakerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Presentations_EventId",
@@ -347,19 +449,24 @@ namespace CMS.API.Migrations
                 column: "EventId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Presentations_PlannerId",
+                table: "Presentations",
+                column: "PlannerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RefreshToken_AccountId",
                 table: "RefreshToken",
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Speakers_EventId",
-                table: "Speakers",
-                column: "EventId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_SponsorEvents_EventId",
                 table: "SponsorEvents",
                 column: "EventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SponsorEvents_PlannerId",
+                table: "SponsorEvents",
+                column: "PlannerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SponsorEvents_SponsorId1",
@@ -383,13 +490,13 @@ namespace CMS.API.Migrations
                 name: "PartnerEvents");
 
             migrationBuilder.DropTable(
+                name: "PlannerSpeaker");
+
+            migrationBuilder.DropTable(
                 name: "Presentations");
 
             migrationBuilder.DropTable(
                 name: "RefreshToken");
-
-            migrationBuilder.DropTable(
-                name: "Speakers");
 
             migrationBuilder.DropTable(
                 name: "SponsorEvents");
@@ -401,10 +508,16 @@ namespace CMS.API.Migrations
                 name: "Partners");
 
             migrationBuilder.DropTable(
-                name: "Events");
+                name: "Speakers");
+
+            migrationBuilder.DropTable(
+                name: "Planner");
 
             migrationBuilder.DropTable(
                 name: "Sponsors");
+
+            migrationBuilder.DropTable(
+                name: "Events");
 
             migrationBuilder.DropTable(
                 name: "Accounts");

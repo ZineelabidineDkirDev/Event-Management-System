@@ -14,6 +14,9 @@ namespace CMS.API.Mapper
             CreateMap<PartnerDTO, Partner>();
             CreateMap<SpeakerDTO, Speaker>();
             CreateMap<SponsorDTO, Sponsor>();
+            CreateMap<PaymentDTO, Payement>();
+            CreateMap<PlannerDTO, Planner>();
+            CreateMap<PlannerSpeakerDTO, PlannerSpeaker>();
 
             CreateMap<ApplicationSettings, ApplicationSettingsDTO>();
             CreateMap<Category, CategoryDTO>();
@@ -21,6 +24,9 @@ namespace CMS.API.Mapper
             CreateMap<Partner, PartnerDTO>();
             CreateMap<Speaker, SpeakerDTO>();
             CreateMap<Sponsor, SponsorDTO>();
+            CreateMap<Payement, PaymentDTO>();
+            CreateMap<Planner, PlannerDTO>();
+            CreateMap<PlannerSpeaker,  PlannerSpeakerDTO>();
 
         }
     }

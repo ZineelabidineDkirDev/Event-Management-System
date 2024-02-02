@@ -157,7 +157,7 @@ namespace CMS.API.Services
 
             var isFirstAccount = _context.Accounts.Count() == 0;
             Email = account.Email;
-            account.Role = isFirstAccount ? Role.Admin : Role.User;
+            account.Role = isFirstAccount ? Role.Admin : Role.Participant;
             account.Created = DateTime.UtcNow;
             account.VerificationToken = generateVerificationToken();
             account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);

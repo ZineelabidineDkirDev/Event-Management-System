@@ -137,48 +137,11 @@ namespace CMS.API.Migrations
                     b.Property<int?>("AccountId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("EndDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Horizontal")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ImageName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsOnline")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MaxAttendees")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("OrganizerId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("StartDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("TicketPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Vertical")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -191,13 +154,13 @@ namespace CMS.API.Migrations
 
             modelBuilder.Entity("CMS.API.Entities.EventAttendance", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AccountId")
+                    b.Property<int>("AccountId")
                         .HasColumnType("int");
 
                     b.Property<int>("EventId")
@@ -206,37 +169,50 @@ namespace CMS.API.Migrations
                     b.Property<bool>("HasAttended")
                         .HasColumnType("bit");
 
+                    b.Property<int>("ParticipantId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PlannerId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("UserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("AccountId");
 
                     b.HasIndex("EventId");
+
+                    b.HasIndex("PlannerId");
 
                     b.ToTable("EventAttendances");
                 });
 
             modelBuilder.Entity("CMS.API.Entities.EventCategory", b =>
                 {
-                    b.Property<int>("EventId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EventId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("EventId1")
+                    b.Property<int>("EventId")
                         .HasColumnType("int");
 
-                    b.HasKey("EventId");
+                    b.Property<int?>("PlannerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("EventId1");
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("PlannerId");
 
                     b.ToTable("EventCategories");
                 });
@@ -268,25 +244,105 @@ namespace CMS.API.Migrations
 
             modelBuilder.Entity("CMS.API.Entities.PartnerEvent", b =>
                 {
-                    b.Property<int>("PartnerId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PartnerId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PartnerId1")
+                    b.Property<int>("PartnerId")
                         .HasColumnType("int");
 
-                    b.HasKey("PartnerId");
+                    b.Property<int?>("PlannerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("EventId");
 
-                    b.HasIndex("PartnerId1");
+                    b.HasIndex("PartnerId");
+
+                    b.HasIndex("PlannerId");
 
                     b.ToTable("PartnerEvents");
+                });
+
+            modelBuilder.Entity("CMS.API.Entities.Planner", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EndDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Horizontal")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsOnline")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MaxAttendees")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrganizerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Vertical")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("Planner");
+                });
+
+            modelBuilder.Entity("CMS.API.Entities.PlannerSpeaker", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("PlannerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SpeakerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlannerId");
+
+                    b.HasIndex("SpeakerId");
+
+                    b.ToTable("PlannerSpeaker");
                 });
 
             modelBuilder.Entity("CMS.API.Entities.Presentation", b =>
@@ -307,6 +363,9 @@ namespace CMS.API.Migrations
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PlannerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("SlideUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -318,6 +377,8 @@ namespace CMS.API.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EventId");
+
+                    b.HasIndex("PlannerId");
 
                     b.ToTable("Presentations");
                 });
@@ -338,8 +399,12 @@ namespace CMS.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("EventId")
-                        .HasColumnType("int");
+                    b.Property<bool>("DesactivateAccount")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ImageName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LinkedInProfile")
                         .IsRequired()
@@ -359,8 +424,6 @@ namespace CMS.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EventId");
-
                     b.ToTable("Speakers");
                 });
 
@@ -376,11 +439,15 @@ namespace CMS.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LogoUrl")
+                    b.Property<string>("LogoName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -400,12 +467,17 @@ namespace CMS.API.Migrations
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PlannerId")
+                        .HasColumnType("int");
+
                     b.Property<int>("SponsorId1")
                         .HasColumnType("int");
 
                     b.HasKey("SponsorId");
 
                     b.HasIndex("EventId");
+
+                    b.HasIndex("PlannerId");
 
                     b.HasIndex("SponsorId1");
 
@@ -478,15 +550,23 @@ namespace CMS.API.Migrations
 
             modelBuilder.Entity("CMS.API.Entities.EventAttendance", b =>
                 {
-                    b.HasOne("CMS.API.Entities.Account", null)
+                    b.HasOne("CMS.API.Entities.Account", "Account")
                         .WithMany("AttendedEvents")
-                        .HasForeignKey("AccountId");
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("CMS.API.Entities.Event", "Event")
                         .WithMany("Attendances")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("CMS.API.Entities.Planner", null)
+                        .WithMany("Attendances")
+                        .HasForeignKey("PlannerId");
+
+                    b.Navigation("Account");
 
                     b.Navigation("Event");
                 });
@@ -501,9 +581,13 @@ namespace CMS.API.Migrations
 
                     b.HasOne("CMS.API.Entities.Event", "Event")
                         .WithMany("EventCategories")
-                        .HasForeignKey("EventId1")
+                        .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("CMS.API.Entities.Planner", null)
+                        .WithMany("EventCategories")
+                        .HasForeignKey("PlannerId");
 
                     b.Navigation("Category");
 
@@ -520,13 +604,47 @@ namespace CMS.API.Migrations
 
                     b.HasOne("CMS.API.Entities.Partner", "Partner")
                         .WithMany("PartnerEvents")
-                        .HasForeignKey("PartnerId1")
+                        .HasForeignKey("PartnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("CMS.API.Entities.Planner", null)
+                        .WithMany("PartnerEvents")
+                        .HasForeignKey("PlannerId");
 
                     b.Navigation("Event");
 
                     b.Navigation("Partner");
+                });
+
+            modelBuilder.Entity("CMS.API.Entities.Planner", b =>
+                {
+                    b.HasOne("CMS.API.Entities.Event", "Event")
+                        .WithMany("Planners")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+                });
+
+            modelBuilder.Entity("CMS.API.Entities.PlannerSpeaker", b =>
+                {
+                    b.HasOne("CMS.API.Entities.Planner", "Planner")
+                        .WithMany("PlannerSpeakers")
+                        .HasForeignKey("PlannerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CMS.API.Entities.Speaker", "Speaker")
+                        .WithMany("PlannerSpeakers")
+                        .HasForeignKey("SpeakerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Planner");
+
+                    b.Navigation("Speaker");
                 });
 
             modelBuilder.Entity("CMS.API.Entities.Presentation", b =>
@@ -537,16 +655,9 @@ namespace CMS.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Event");
-                });
-
-            modelBuilder.Entity("CMS.API.Entities.Speaker", b =>
-                {
-                    b.HasOne("CMS.API.Entities.Event", "Event")
-                        .WithMany("Speakers")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("CMS.API.Entities.Planner", null)
+                        .WithMany("Presentations")
+                        .HasForeignKey("PlannerId");
 
                     b.Navigation("Event");
                 });
@@ -558,6 +669,10 @@ namespace CMS.API.Migrations
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("CMS.API.Entities.Planner", null)
+                        .WithMany("SponsorEvents")
+                        .HasForeignKey("PlannerId");
 
                     b.HasOne("CMS.API.Entities.Sponsor", "Sponsor")
                         .WithMany("SponsorEvents")
@@ -590,9 +705,9 @@ namespace CMS.API.Migrations
 
                     b.Navigation("PartnerEvents");
 
-                    b.Navigation("Presentations");
+                    b.Navigation("Planners");
 
-                    b.Navigation("Speakers");
+                    b.Navigation("Presentations");
 
                     b.Navigation("SponsorEvents");
                 });
@@ -600,6 +715,26 @@ namespace CMS.API.Migrations
             modelBuilder.Entity("CMS.API.Entities.Partner", b =>
                 {
                     b.Navigation("PartnerEvents");
+                });
+
+            modelBuilder.Entity("CMS.API.Entities.Planner", b =>
+                {
+                    b.Navigation("Attendances");
+
+                    b.Navigation("EventCategories");
+
+                    b.Navigation("PartnerEvents");
+
+                    b.Navigation("PlannerSpeakers");
+
+                    b.Navigation("Presentations");
+
+                    b.Navigation("SponsorEvents");
+                });
+
+            modelBuilder.Entity("CMS.API.Entities.Speaker", b =>
+                {
+                    b.Navigation("PlannerSpeakers");
                 });
 
             modelBuilder.Entity("CMS.API.Entities.Sponsor", b =>

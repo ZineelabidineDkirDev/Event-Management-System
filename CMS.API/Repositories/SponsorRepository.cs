@@ -8,10 +8,12 @@ namespace CMS.API.Repositories
     public class SponsorRepository : ISponsorRepository
     {
         private readonly DataContext _context;
+        private readonly IWebHostEnvironment _webHost;
 
-        public SponsorRepository(DataContext context)
+        public SponsorRepository(DataContext context, IWebHostEnvironment webHost)
         {
             _context = context;
+            _webHost = webHost;
         }
 
         public async Task<IEnumerable<Sponsor>> GetSponsors()
@@ -26,8 +28,37 @@ namespace CMS.API.Repositories
 
         public async Task<int> CreateSponsor(Sponsor sponsor)
         {
-            _context.Sponsors.Add(sponsor);
-            return await _context.SaveChangesAsync();
+
+            try
+            {
+                string folder = Path.Combine(_webHost.WebRootPath, "public");
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+
+                string originalFileName = Path.GetFileNameWithoutExtension(sponsor.Logo.FileName);
+                string fileExtension = Path.GetExtension(sponsor.Logo.FileName);
+                string uniqueFileName = $"{originalFileName}_{DateTime.Now:yyyyMMddHHmmssfff}{fileExtension}";
+
+                sponsor.LogoName = uniqueFileName;
+
+                _context.Sponsors.Add(sponsor);
+                await _context.SaveChangesAsync();
+
+                string filepath = Path.Combine(folder, uniqueFileName);
+
+                using (FileStream fileStream = new FileStream(filepath, FileMode.Create))
+                {
+                    await sponsor.Logo.CopyToAsync(fileStream);
+                }
+                Console.WriteLine("Uploaded");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            return sponsor.Id;
         }
 
         public async Task<int> UpdateSponsor(Sponsor sponsor)

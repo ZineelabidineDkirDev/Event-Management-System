@@ -16,6 +16,9 @@ public class DataContext : DbContext
     public DbSet<PartnerEvent> PartnerEvents { get; set; }
     public DbSet<Presentation> Presentations { get; set; }
     public DbSet<Speaker> Speakers { get; set; }
+    public DbSet<Payement> Payements { get; set; }
+    public DbSet<Planner> Planners { get; set; }
+    public DbSet<PlannerSpeaker> PlannerSpeakers { get; set; }
     public DbSet<Sponsor> Sponsors { get; set; }
     public DbSet<SponsorEvent> SponsorEvents { get; set; }
 

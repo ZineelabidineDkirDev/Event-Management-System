@@ -8,10 +8,12 @@ namespace CMS.API.Repositories
     public class SpeakerRepository : ISpeakerRepository
     {
         private readonly DataContext _context;
+        private readonly IWebHostEnvironment _webHost;
 
-        public SpeakerRepository(DataContext context)
+        public SpeakerRepository(DataContext context, IWebHostEnvironment webHost)
         {
             _context = context;
+            _webHost = webHost;
         }
 
         public async Task<IEnumerable<Speaker>> GetSpeakers()
@@ -26,8 +28,36 @@ namespace CMS.API.Repositories
 
         public async Task<int> CreateSpeaker(Speaker speaker)
         {
-            _context.Speakers.Add(speaker);
-            return await _context.SaveChangesAsync();
+            try
+            {
+                string folder = Path.Combine(_webHost.WebRootPath, "public");
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+
+                string originalFileName = Path.GetFileNameWithoutExtension(speaker.Image.FileName);
+                string fileExtension = Path.GetExtension(speaker.Image.FileName);
+                string uniqueFileName = $"{originalFileName}_{DateTime.Now:yyyyMMddHHmmssfff}{fileExtension}";
+
+                speaker.ImageName = uniqueFileName;
+
+                _context.Speakers.Add(speaker);
+                await _context.SaveChangesAsync();
+
+                string filepath = Path.Combine(folder, uniqueFileName);
+
+                using (FileStream fileStream = new FileStream(filepath, FileMode.Create))
+                {
+                    await speaker.Image.CopyToAsync(fileStream);
+                }
+                Console.WriteLine("Uploaded");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            return speaker.Id;
         }
 
         public async Task<int> UpdateSpeaker(Speaker speaker)

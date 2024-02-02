@@ -4,11 +4,7 @@ using CMS.API.Helpers;
 using CMS.API.Mapper;
 using CMS.API.Repositories;
 using CMS.API.Services;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,6 +41,9 @@ services.AddScoped<IEventRepository, EventRepository>();
 services.AddScoped<IPartnerRepository, PartnerRepository>();
 services.AddScoped<ISpeakerRepository, SpeakerRepository>();
 services.AddScoped<ISponsorRepository, SponsorRepository>();
+services.AddScoped<IPayementRepository, PayementRepository>(); 
+services.AddScoped<IPlannerRepository, PlannerRepository>();
+services.AddScoped<IPlannerSpeakerRepository, PlannerSpeakerRepository>(); 
 
 var app = builder.Build();
 

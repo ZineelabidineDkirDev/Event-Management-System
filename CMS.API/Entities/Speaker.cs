@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Eventing.Reader;
 
 namespace CMS.API.Entities
 {
@@ -10,6 +11,8 @@ namespace CMS.API.Entities
         public int Id { get; set; }
         public string Name { get; set; }
 
+        public string ImageName { get; set; }
+
         [NotMapped]
         public IFormFile Image { get; set; }
         public string Bio { get; set; }
@@ -17,9 +20,7 @@ namespace CMS.API.Entities
         public string Position { get; set; }
         public string LinkedInProfile { get; set; }
         public string TwitterProfile { get; set; }
-
-
-        public int EventId { get; set; }
-        public Event Event { get; set; }
+        public bool DesactivateAccount { get; set; }
+        public ICollection<PlannerSpeaker> PlannerSpeakers { get; set; }
     }
 }

@@ -12,6 +12,6 @@ namespace CMS.API.DTOs
         public string Position { get; set; }
         public string LinkedInProfile { get; set; }
         public string TwitterProfile { get; set; }
-        public int EventId { get; set; }
+        public bool DesactivateAccount { get; set; }
     }
 }

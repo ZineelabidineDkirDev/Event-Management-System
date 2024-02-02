@@ -9,5 +9,6 @@ namespace CMS.API.Contracts
         Task<int> CreateEvent(Event eventEntity);
         Task<int> UpdateEvent(Event eventEntity);
         Task<int> DeleteEvent(int id);
+
     }
 }
