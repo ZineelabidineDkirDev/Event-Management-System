@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
-using CMS.API.Authorization;
 using CMS.API.Contracts;
 using CMS.API.Entities;
 using CMS.API.Helpers;
 using CMS.API.Models.Accounts;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -393,6 +392,32 @@ namespace CMS.API.Services
                 html: $@"<h4>Reset Password Email</h4>
                         {message}"
             );
+        }
+
+        public Account AssignRole(int id)
+        {
+            var account = _context.Accounts.Find(id);
+            if (account == null)
+            {
+                throw new AppException("Account not found to assing role");
+            }
+            account.Role = Role.Speaker;
+            _context.Accounts.Update(account);
+            _context.SaveChanges();
+            return account;
+        }
+
+        public Account UnassignRole(int id)
+        {
+            var account = _context.Accounts.Find(id);
+            if (account == null)
+            {
+                throw new AppException("Account not found to assing role");
+            }
+            account.Role = Role.Participant;
+            _context.Accounts.Update(account);
+            _context.SaveChanges();
+            return account;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using CMS.API.Authorization;
 using CMS.API.Contracts;
 using CMS.API.Entities;
+using CMS.API.Helpers;
 using CMS.API.Models.Accounts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -144,6 +145,51 @@ namespace CMS.API.Controllers
             return Ok(new { message = "Account deleted successfully" });
         }
 
+        [Authorize(Role.Admin)]
+        [HttpPut("assign-role/{id}")]
+        public IActionResult AssignRole(int id)
+        {
+            try
+            {
+                var account = _accountService.AssignRole(id);
+                return Ok(account);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (AppException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal Server Error" });
+            }
+        }
+
+        [Authorize(Role.Admin)]
+        [HttpPut("unassign-role/{id}")]
+        public IActionResult UnassignRole(int id)
+        {
+            try
+            {
+                var account = _accountService.UnassignRole(id);
+                return Ok(account);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (AppException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal Server Error" });
+            }
+        }
 
         private void setTokenCookie(string token)
         {

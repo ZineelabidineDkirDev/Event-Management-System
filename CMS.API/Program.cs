@@ -8,7 +8,6 @@ using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 using Serilog;
 using Microsoft.EntityFrameworkCore;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()

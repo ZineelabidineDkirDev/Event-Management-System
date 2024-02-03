@@ -19,10 +19,26 @@ namespace CMS.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet("Planners")]
         public async Task<IActionResult> GetPlanners()
         {
             var planners = await _plannerRepository.GetPlanners();
+            var plannersDTO = _mapper.Map<IEnumerable<PlannerDTO>>(planners);
+            return Ok(plannersDTO);
+        }
+
+        [HttpGet("PlannersActive")]
+        public async Task<IActionResult> GetPlannersActive()
+        {
+            var planners = await _plannerRepository.GetPlannersActive();
+            var plannersDTO = _mapper.Map<IEnumerable<PlannerDTO>>(planners);
+            return Ok(plannersDTO);
+        }
+
+        [HttpGet("PlannersNonActive")]
+        public async Task<IActionResult> GetPlannersNonActive()
+        {
+            var planners = await _plannerRepository.GetPlannersNonActive();
             var plannersDTO = _mapper.Map<IEnumerable<PlannerDTO>>(planners);
             return Ok(plannersDTO);
         }
@@ -73,10 +89,10 @@ namespace CMS.API.Controllers
         {
             var result = await _plannerRepository.ClosePlanner(id);
 
-            if (result > 0)
+            if (result)
                 return Ok(result);
             else
-                return NotFound();
+                return NotFound("Planner with ID: " + id + " not found.");
         }
     }
 }

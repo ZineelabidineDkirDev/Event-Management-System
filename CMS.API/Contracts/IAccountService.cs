@@ -1,4 +1,5 @@
-﻿using CMS.API.Models.Accounts;
+﻿using CMS.API.Entities;
+using CMS.API.Models.Accounts;
 
 namespace CMS.API.Contracts;
 
@@ -17,4 +18,6 @@ public interface IAccountService
     AccountResponse Create(CreateRequest model);
     AccountResponse Update(int id, UpdateRequest model);
     void Delete(int id);
+    Account AssignRole(int id);
+    Account UnassignRole(int id);
 }

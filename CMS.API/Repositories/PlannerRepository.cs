@@ -19,6 +19,16 @@ namespace CMS.API.Repositories
             return await _context.Planners.ToListAsync();
         }
 
+        public async Task<IEnumerable<Planner>> GetPlannersActive()
+        {
+            return await _context.Planners.Where(planner => planner.IsActive == true).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Planner>> GetPlannersNonActive()
+        {
+            return await _context.Planners.Where(planner => planner.IsActive == false).ToListAsync();
+        }
+
         public async Task<Planner> GetPlannerById(int id)
         {
             return await _context.Planners.FindAsync(id);
@@ -85,19 +95,35 @@ namespace CMS.API.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> ClosePlanner(int id)
+        public async Task<bool> ClosePlanner(int id)
         {
-            var plannerToClose = await _context.Planners.FindAsync(id);
-
-            if (plannerToClose == null)
-                return 0;
-
-            if (plannerToClose.EndDateTime <= DateTime.UtcNow)
+            try
             {
-                plannerToClose.IsActive = false;
-            }
+                var plannerToClose = await _context.Planners.FindAsync(id);
 
-            return await _context.SaveChangesAsync();
+                if (plannerToClose == null)
+                {
+                    return false;
+                }
+
+                if (plannerToClose.EndDateTime <= DateTime.UtcNow || plannerToClose.IsActive == true)
+                {
+                    plannerToClose.IsActive = false;
+
+                    _context.Planners.Update(plannerToClose);
+                    await _context.SaveChangesAsync();
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw; 
+            }
         }
     }
 }
