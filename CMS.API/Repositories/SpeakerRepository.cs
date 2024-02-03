@@ -42,6 +42,8 @@ namespace CMS.API.Repositories
 
                 speaker.ImageName = uniqueFileName;
 
+                speaker.Id = 0;
+
                 _context.Speakers.Add(speaker);
                 await _context.SaveChangesAsync();
 
@@ -51,14 +53,17 @@ namespace CMS.API.Repositories
                 {
                     await speaker.Image.CopyToAsync(fileStream);
                 }
+
                 Console.WriteLine("Uploaded");
+                return speaker.Id;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
+                return 0;
             }
-            return speaker.Id;
         }
+
 
         public async Task<int> UpdateSpeaker(Speaker speaker)
         {

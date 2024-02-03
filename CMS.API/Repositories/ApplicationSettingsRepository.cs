@@ -14,9 +14,9 @@ namespace CMS.API.Repositories
             _context = context;
         }
 
-        public async Task<ApplicationSettings> GetApplicationSettings()
+        public async Task<IEnumerable<ApplicationSettings>> GetApplicationSettings()
         {
-            return await _context.ApplicationSettings.FirstOrDefaultAsync();
+            return await _context.ApplicationSettings.ToListAsync();
         }
 
         public async Task<int> CreateApplicationSettings(ApplicationSettings applicationSettings)

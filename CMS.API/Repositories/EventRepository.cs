@@ -1,10 +1,7 @@
-﻿using AutoMapper;
-using CMS.API.Contracts;
+﻿using CMS.API.Contracts;
 using CMS.API.Entities;
 using CMS.API.Helpers;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Http.Headers;
 
 namespace CMS.API.Repositories
 {
@@ -67,8 +64,25 @@ namespace CMS.API.Repositories
 
                 eventEntity.ImageName = uniqueFileName;
 
+                eventEntity.Id = 0;
+
                 _context.Events.Add(eventEntity);
-                await _context.SaveChangesAsync();
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateException dbEx)
+                {
+                    Console.WriteLine($"Database update error: {dbEx.Message}");
+
+                    if (dbEx.InnerException != null)
+                    {
+                        Console.WriteLine($"Inner Exception: {dbEx.InnerException.Message}");
+                    }
+
+                    return 0;
+                }
 
                 string filepath = Path.Combine(folder, uniqueFileName);
 
@@ -76,13 +90,16 @@ namespace CMS.API.Repositories
                 {
                     await eventEntity.Image.CopyToAsync(fileStream);
                 }
+
                 Console.WriteLine("Uploaded");
+                return eventEntity.Id;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
+                return 0; 
             }
-            return eventEntity.Id;
         }
+
     }
 }

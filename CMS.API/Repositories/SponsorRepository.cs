@@ -28,7 +28,6 @@ namespace CMS.API.Repositories
 
         public async Task<int> CreateSponsor(Sponsor sponsor)
         {
-
             try
             {
                 string folder = Path.Combine(_webHost.WebRootPath, "public");
@@ -43,6 +42,8 @@ namespace CMS.API.Repositories
 
                 sponsor.LogoName = uniqueFileName;
 
+                sponsor.Id = 0;
+
                 _context.Sponsors.Add(sponsor);
                 await _context.SaveChangesAsync();
 
@@ -52,14 +53,17 @@ namespace CMS.API.Repositories
                 {
                     await sponsor.Logo.CopyToAsync(fileStream);
                 }
+
                 Console.WriteLine("Uploaded");
+                return sponsor.Id;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
+                return 0; 
             }
-            return sponsor.Id;
         }
+
 
         public async Task<int> UpdateSponsor(Sponsor sponsor)
         {

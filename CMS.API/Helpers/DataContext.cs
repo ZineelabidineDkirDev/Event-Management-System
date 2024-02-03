@@ -1,8 +1,13 @@
 ﻿namespace CMS.API.Helpers;
 
+using AutoMapper.Execution;
 using CMS.API.Entities;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Pqc.Crypto.Lms;
 using System;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public class DataContext : DbContext
 {
@@ -29,10 +34,19 @@ public class DataContext : DbContext
         Configuration = configuration;
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder options)
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        options.UseSqlServer(Configuration.GetConnectionString("CMSDB"));
+        if (!optionsBuilder.IsConfigured)
+        {
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("CMSDB"));
+        }
     }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Account>().ToTable("Accounts");

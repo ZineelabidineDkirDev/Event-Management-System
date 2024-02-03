@@ -7,6 +7,8 @@ using CMS.API.Services;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 using Serilog;
+using Microsoft.EntityFrameworkCore;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
@@ -39,6 +41,8 @@ try
     });
 
     services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+    services.AddDbContext<DataContext>(
+        options => options.UseSqlServer(builder.Configuration.GetConnectionString("CMSDB")));
     services.AddAutoMapper(typeof(MappingProfile));
 
     services.AddScoped<IJwtUtils, JwtUtils>();
