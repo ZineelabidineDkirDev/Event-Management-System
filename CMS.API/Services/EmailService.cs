@@ -16,11 +16,10 @@ public class EmailService : IEmailService
     {
         _appSettings = appSettings.Value;
     }
-
     public void Send(string to, string subject, string html, string from = null)
     {
         var email = new MimeMessage();
-        email.From.Add(MailboxAddress.Parse(from ?? _appSettings.EmailFrom));
+        email.From.Add(MailboxAddress.Parse(from ?? to));
         email.To.Add(MailboxAddress.Parse(to));
         email.Subject = subject;
         email.Body = new TextPart(TextFormat.Html) { Text = html };

@@ -3,7 +3,6 @@ using CMS.API.Contracts;
 using CMS.API.Entities;
 using CMS.API.Helpers;
 using CMS.API.Models.Accounts;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -124,14 +123,14 @@ namespace CMS.API.Services
             account.Role = isFirstAccount ? Role.Admin : Role.Participant;
             account.Created = DateTime.UtcNow;
             account.VerificationToken = generateVerificationToken();
-            account.ResetToken = generateResetToken(); 
+            account.ResetToken = generateResetToken();
 
             account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
 
             _context.Accounts.Add(account);
             _context.SaveChanges();
 
-            sendVerificationEmail(account, origin);
+            sendVerificationEmail(model.Email, account, origin);
         }
 
 
@@ -162,7 +161,7 @@ namespace CMS.API.Services
             _context.Accounts.Update(account);
             _context.SaveChanges();
 
-            sendPasswordResetEmail(account, origin);
+            sendPasswordResetEmail(model.Email, account, origin);
         }
 
         public void ValidateResetToken(ValidateResetTokenRequest model)
@@ -330,7 +329,7 @@ namespace CMS.API.Services
             token.ReplacedByToken = replacedByToken;
         }
 
-        private void sendVerificationEmail(Account account, string origin)
+        private void sendVerificationEmail(string email, Account account, string origin)
         {
             string message;
             if (!string.IsNullOrEmpty(origin))
@@ -344,9 +343,8 @@ namespace CMS.API.Services
                 message = $@"<p>Please use the below token to verify your email address with the <code>/accounts/verify-email</code> api route:</p>
                             <p><code>{account.VerificationToken}</code></p>";
             }
-
             _emailService.Send(
-                to: account.Email,
+                to: email,
                 subject: "Sign-up Verification API - Verify Email",
                 html: $@"<h4>Verify Email</h4>
                         <p>Thanks for registering!</p>
@@ -371,7 +369,7 @@ namespace CMS.API.Services
             );
         }
 
-        private void sendPasswordResetEmail(Account account, string origin)
+        private void sendPasswordResetEmail(string email, Account account, string origin)
         {
             string message;
             if (!string.IsNullOrEmpty(origin))
@@ -385,9 +383,8 @@ namespace CMS.API.Services
                 message = $@"<p>Please use the below token to reset your password with the <code>/accounts/reset-password</code> api route:</p>
                             <p><code>{account.ResetToken}</code></p>";
             }
-
             _emailService.Send(
-                to: account.Email,
+                to: email,
                 subject: "Sign-up Verification API - Reset Password",
                 html: $@"<h4>Reset Password Email</h4>
                         {message}"
