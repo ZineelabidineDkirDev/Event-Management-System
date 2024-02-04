@@ -38,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\public\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>

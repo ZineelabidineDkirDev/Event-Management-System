@@ -20,7 +20,7 @@ try
 
     builder.Host.UseSerilog();
     builder.Logging.ClearProviders();
-    builder.Logging.AddConsole();   
+    builder.Logging.AddConsole();
     builder.Logging.AddDebug();
 
     var services = builder.Services;
@@ -37,6 +37,8 @@ try
     services.AddSwaggerGen(c =>
     {
         c.SwaggerDoc("v1", new OpenApiInfo { Title = "MMC APIs", Version = "v1" });
+
+        c.OperationFilter<FileUploadParams>();
     });
 
     services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
@@ -60,7 +62,6 @@ try
     var app = builder.Build();
 
     app.UseStaticFiles();
-
 
     app.UseSwagger();
     app.UseSwaggerUI(c =>
@@ -86,7 +87,9 @@ try
 
     app.Run();
 }
-catch(Exception ex)
+catch (Exception ex)
 {
     Log.Fatal(ex, "Application terminated unexpectedly");
 }
+
+
