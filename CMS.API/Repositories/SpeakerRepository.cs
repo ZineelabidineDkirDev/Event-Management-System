@@ -70,10 +70,41 @@ namespace CMS.API.Repositories
             var existingEntity = await _context.Speakers.FindAsync(speaker.Id);
 
             if (existingEntity == null)
-                return 0; 
+                return 0;
+
+            if (!string.IsNullOrEmpty(existingEntity.ImageName))
+            {
+                string filePath = Path.Combine(_webHost.WebRootPath, "public", existingEntity.ImageName);
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+            }
 
             _context.Entry(existingEntity).CurrentValues.SetValues(speaker);
-            return await _context.SaveChangesAsync();
+
+            await _context.SaveChangesAsync();
+
+            if (speaker.Image != null)
+            {
+                string folder = Path.Combine(_webHost.WebRootPath, "public");
+                string originalFileName = Path.GetFileNameWithoutExtension(speaker.Image.FileName);
+                string fileExtension = Path.GetExtension(speaker.Image.FileName);
+                string uniqueFileName = $"{originalFileName}_{DateTime.Now:yyyyMMddHHmmssfff}{fileExtension}";
+
+                existingEntity.ImageName = uniqueFileName;
+
+                string filePath = Path.Combine(folder, uniqueFileName);
+
+                using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await speaker.Image.CopyToAsync(fileStream);
+                }
+
+                await _context.SaveChangesAsync();
+            }
+
+            return existingEntity.Id;
         }
 
         public async Task<int> DeleteSpeaker(int id)
@@ -82,6 +113,15 @@ namespace CMS.API.Repositories
 
             if (existingEntity == null)
                 return 0;
+
+            if (!string.IsNullOrEmpty(existingEntity.ImageName))
+            {
+                string filePath = Path.Combine(_webHost.WebRootPath, "public", existingEntity.ImageName);
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+            }
 
             _context.Speakers.Remove(existingEntity);
             return await _context.SaveChangesAsync();
