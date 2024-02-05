@@ -9,7 +9,7 @@ namespace CMS.API.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class AccountsController : BaseController
     {
         private readonly IAccountService _accountService;

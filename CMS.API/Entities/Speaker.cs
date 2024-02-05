@@ -21,6 +21,7 @@ namespace CMS.API.Entities
         public string Position { get; set; }
         public string LinkedInProfile { get; set; }
         public string TwitterProfile { get; set; }
+        public string InstagramProfile { get; set; }
         public bool DesactivateAccount { get; set; }
         public ICollection<PlannerSpeaker> PlannerSpeakers { get; set; }
     }

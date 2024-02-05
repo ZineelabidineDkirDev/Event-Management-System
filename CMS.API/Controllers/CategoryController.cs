@@ -35,7 +35,7 @@ namespace CMS.API.Controllers
             return Ok(categoryDTO);
         }
 
-        [HttpPost]
+        [HttpPost, DisableRequestSizeLimit]
         public async Task<IActionResult> CreateCategory(CategoryDTO categoryDTO)
         {
             var category = _mapper.Map<Category>(categoryDTO);

@@ -10,5 +10,6 @@ namespace CMS.API.DTOs
         public string Description { get; set; }
         [NotMapped]
         public IFormFile Logo { get; set; }
+        public string ImageName { get; set; }
     }
 }

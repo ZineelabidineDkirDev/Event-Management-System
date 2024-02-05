@@ -430,6 +430,10 @@ namespace CMS.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("InstagramProfile")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LinkedInProfile")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
