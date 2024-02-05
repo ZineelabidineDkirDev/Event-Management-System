@@ -30,7 +30,7 @@ namespace CMS.API.Repositories
         {
             try
             {
-                string folder = Path.Combine(_webHost.WebRootPath, "");
+                string folder = Path.Combine(_webHost.WebRootPath, "public");
                 if (!Directory.Exists(folder))
                 {
                     Directory.CreateDirectory(folder);
@@ -60,7 +60,7 @@ namespace CMS.API.Repositories
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
-                return 0; 
+                return 0;
             }
         }
 

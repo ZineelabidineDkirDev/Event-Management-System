@@ -35,7 +35,7 @@ namespace CMS.API.Repositories
             var existingEntity = await _context.Partners.FindAsync(partner.Id);
 
             if (existingEntity == null)
-                return 0; 
+                return 0;
 
             _context.Entry(existingEntity).CurrentValues.SetValues(partner);
             return await _context.SaveChangesAsync();
@@ -46,7 +46,7 @@ namespace CMS.API.Repositories
             var existingEntity = await _context.Partners.FindAsync(id);
 
             if (existingEntity == null)
-                return 0; 
+                return 0;
 
             _context.Partners.Remove(existingEntity);
             return await _context.SaveChangesAsync();

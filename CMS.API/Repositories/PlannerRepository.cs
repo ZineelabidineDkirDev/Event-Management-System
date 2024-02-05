@@ -122,7 +122,7 @@ namespace CMS.API.Repositories
             }
             catch (Exception ex)
             {
-                throw; 
+                throw;
             }
         }
     }

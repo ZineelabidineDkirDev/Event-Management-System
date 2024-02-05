@@ -35,7 +35,7 @@ namespace CMS.API.Repositories
             var existingEntity = await _context.Categories.FindAsync(category.Id);
 
             if (existingEntity == null)
-                return 0; 
+                return 0;
 
             _context.Entry(existingEntity).CurrentValues.SetValues(category);
             return await _context.SaveChangesAsync();
@@ -46,7 +46,7 @@ namespace CMS.API.Repositories
             var existingEntity = await _context.Categories.FindAsync(id);
 
             if (existingEntity == null)
-                return 0; 
+                return 0;
 
             _context.Categories.Remove(existingEntity);
             return await _context.SaveChangesAsync();

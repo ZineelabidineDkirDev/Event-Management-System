@@ -9,7 +9,7 @@ namespace CMS.API.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class AccountsController : BaseController
     {
         private readonly IAccountService _accountService;
@@ -60,7 +60,7 @@ namespace CMS.API.Controllers
         [HttpPost("register")]
         public IActionResult Register(RegisterRequest model)
         {
-            _accountService.Register(model, Request.Headers["origin"]!); 
+            _accountService.Register(model, Request.Headers["origin"]!);
             return Ok(new { message = "Registration successful, please check your email for verification instructions" });
         }
 
@@ -68,7 +68,7 @@ namespace CMS.API.Controllers
         [HttpPost("verify-email")]
         public IActionResult VerifyEmail(VerifyEmailRequest model)
         {
-            _accountService.VerifyEmail(model.Token); 
+            _accountService.VerifyEmail(model.Token);
             return Ok(new { message = "Verification successful, you can now login" });
         }
 
@@ -84,7 +84,7 @@ namespace CMS.API.Controllers
         [HttpPost("validate-reset-token")]
         public IActionResult ValidateResetToken(ValidateResetTokenRequest model)
         {
-            _accountService.ValidateResetToken(model!); 
+            _accountService.ValidateResetToken(model!);
             return Ok(new { message = "Token is valid" });
         }
 
@@ -92,7 +92,7 @@ namespace CMS.API.Controllers
         [HttpPost("reset-password")]
         public IActionResult ResetPassword(ResetPasswordRequest model)
         {
-            _accountService.ResetPassword(model!); 
+            _accountService.ResetPassword(model!);
             return Ok(new { message = "Password reset successful, you can now login" });
         }
 

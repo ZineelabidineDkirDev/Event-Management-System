@@ -30,7 +30,7 @@ namespace CMS.API.Repositories
             var existingEntity = await _context.ApplicationSettings.FindAsync(applicationSettings.Id);
 
             if (existingEntity == null)
-                return 0; 
+                return 0;
 
             _context.Entry(existingEntity).CurrentValues.SetValues(applicationSettings);
             return await _context.SaveChangesAsync();

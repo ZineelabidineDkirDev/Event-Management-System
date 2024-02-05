@@ -35,13 +35,11 @@ try
     builder.Host.UseSerilog();
 
     builder.Logging.ClearProviders();
-<<<<<<< HEAD
 
     builder.Logging.AddConsole();
 
-=======
     builder.Logging.AddConsole();
->>>>>>> f06723b9bbb649d88a5d3389b0fbe056173a791d
+
     builder.Logging.AddDebug();
 
     var services = builder.Services;
@@ -68,10 +66,8 @@ try
 
         c.SwaggerDoc("v1", new OpenApiInfo { Title = "MMC APIs", Version = "v1" });
 
-<<<<<<< HEAD
-=======
         c.OperationFilter<FileUploadParams>();
->>>>>>> f06723b9bbb649d88a5d3389b0fbe056173a791d
+
     });
 
     services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
@@ -165,21 +161,15 @@ try
     app.Run();
 
 }
-<<<<<<< HEAD
+
+
 
 catch (Exception ex)
-
-=======
-catch (Exception ex)
->>>>>>> f06723b9bbb649d88a5d3389b0fbe056173a791d
 {
 
     Log.Fatal(ex, "Application terminated unexpectedly");
-<<<<<<< HEAD
 
 }
-=======
-}
 
 
->>>>>>> f06723b9bbb649d88a5d3389b0fbe056173a791d
+

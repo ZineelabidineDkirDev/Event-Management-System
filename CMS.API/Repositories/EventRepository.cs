@@ -137,7 +137,7 @@ namespace CMS.API.Repositories
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
-                return 0; 
+                return 0;
             }
         }
 
