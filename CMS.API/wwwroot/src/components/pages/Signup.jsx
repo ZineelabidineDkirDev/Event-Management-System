@@ -31,11 +31,11 @@ class Signup extends React.Component {
                                 <div className="from-group" style={{marginLeft:"7px"}}>
                                 <div className="form-check form-check-inline">
                                     <input className="form-check-input" type="radio" name="title" id="inlineRadio1" value="Male" onClick={e => this.setState({ title: e.target.value })}/>
-                                    <label className="form-check-label" htmlFor="inlineRadio1">Male</label>
+                                    <label className="form-check-label" htmlFor="inlineRadio1">Mr</label>
                                 </div>
                                 <div className="form-check form-check-inline">
                                     <input className="form-check-input" type="radio" name="title" id="inlineRadio2" value="Female" onClick={e => this.setState({ title: e.target.value })}/>
-                                    <label className="form-check-label" htmlFor="inlineRadio2">female</label>
+                                    <label className="form-check-label" htmlFor="inlineRadio2">Mrs</label>
                                 </div>
                                 </div>
 

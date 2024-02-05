@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CMS.API.Contracts;
 using CMS.API.Entities;
+using CMS.API.DTOs;
+using CMS.API.Repositories;
+using AutoMapper;
 
 namespace CMS.API.Controllers
 {
@@ -9,10 +12,12 @@ namespace CMS.API.Controllers
     public class EventCategoryController : ControllerBase
     {
         private readonly IEventCategoryRepository _eventCategoryRepository;
+        private readonly IMapper _mapper;
 
-        public EventCategoryController(IEventCategoryRepository eventCategoryRepository)
+        public EventCategoryController(IEventCategoryRepository eventCategoryRepository, IMapper mapper)
         {
             _eventCategoryRepository = eventCategoryRepository ?? throw new ArgumentNullException(nameof(eventCategoryRepository));
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -48,11 +53,12 @@ namespace CMS.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> CreateEventCategory([FromBody] EventCategory eventCategory)
+        public async Task<ActionResult<int>> CreateEventCategory([FromBody] EventCategoryDTO eventCategoryDto)
         {
             try
             {
-                var result = await _eventCategoryRepository.CreateEventCategory(eventCategory);
+                var eventEntity = _mapper.Map<EventCategory>(eventCategoryDto);
+                var result = await _eventCategoryRepository.CreateEventCategory(eventEntity);
                 return Ok(result);
             }
             catch (Exception ex)

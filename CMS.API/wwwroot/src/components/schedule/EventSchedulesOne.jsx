@@ -62,11 +62,11 @@ class EventSchedulesOne extends Component {
                         </div>
 
                         <div className="blog-post-content">
+                        <h6 className='text-secondary'>Location: <small className='text-uppercase'> {correspondingPlanner ? correspondingPlanner.location : 'N/A'}</small></h6>
                           <span className="date"> {correspondingPlanner ? correspondingPlanner.startDateTime : 'N/A'}</span>
                           <h3><Link to="#">{event.name} </Link></h3>
-                          <p> {correspondingPlanner ? correspondingPlanner.description.substring(0, 80) : 'N/A'}...</p>
-                          <p>Location: {correspondingPlanner ? correspondingPlanner.location : 'N/A'}</p>
-                          <Link to="#" className="read-more-btn">Read More <i className="icofont-double-right"></i></Link>
+                          <p> {correspondingPlanner ? correspondingPlanner.description.substring(0, 70) : 'N/A'}...</p>
+                          <Link to={`/about-1/${event.id}`} className="read-more-btn">Read More <i className="icofont-double-right"></i></Link>
                         </div>
                       </div>
                     </div>

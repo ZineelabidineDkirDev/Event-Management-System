@@ -1,0 +1,129 @@
+.eventspage{
+    height: fit-content;
+    padding: 10px 0px;
+    display: flex;
+}
+
+.eventheader{
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.typeheaderl{
+    width: 300px;
+    padding: 10px;
+    border: 0;
+    border: 1px solid white;
+    border-radius: 10px 0 0 10px;
+}
+
+.typeheaderr{
+    width: 300px;
+    padding: 10px;
+    border: 0;
+    border: 1px solid white;
+    border-radius: 0 10px 10px 0;
+}
+
+.eventmap{
+    width: 50%;
+    height: fit-content;
+    border-radius: 10px;
+    overflow: hidden;
+    z-index: 3;
+    margin-left: 10px;
+}
+
+.eventform{
+    width: 50%;
+    height: fit-content;
+}
+
+
+.form-select{
+    margin-bottom: 10px;
+}
+.form-control{
+    margin-bottom: 10px;
+}
+
+.eventselect{
+    display: block;
+    background-color: rgba(255, 255, 255, 0.367);
+    color: black;
+    border-radius: 3px;
+    border: 0;
+    width:95%;
+    box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.309);
+    padding: 10px 3%;
+    margin: 10px 5%;
+}
+
+.datesevent{
+    display: flex;
+}
+
+.eventinput{
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.367);
+    color: black;
+    border-radius: 3px;
+    border: 0;
+    width:90%;
+    box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.309);
+    padding: 10px 3% 10px 2%;
+    margin: 10px 5%;
+}
+
+.eventinputi{
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.367);
+    color: black;
+    border-radius: 3px;
+    border: 0;
+    width:50%;
+    box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.309);
+    padding: 10px 3% 10px 2%;
+    margin: 0px 5%;
+}
+
+.eventlabel{
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.367);
+    color: black;
+    border-radius: 3px;
+    border: 0;
+    width:40%;
+    padding: 0px 3% 0 2%;
+    margin: 0px 5% 5px;
+    font-size: 15px;
+}
+
+.platforms{
+    display: flex;
+    justify-content: center;
+}
+
+.platform{
+    width: 18%;
+    box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.35);
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.label{
+    text-align: center;
+    padding-top: 10px;
+}
+
+.imageupload{
+    width:100%;
+    display:flex;
+    min-height: 200PX;
+    background:rgba(200, 200,200, 0.582);
+    position:relative;
+    border-radius: 10px;
+}

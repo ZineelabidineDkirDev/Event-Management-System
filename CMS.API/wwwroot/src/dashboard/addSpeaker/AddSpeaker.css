@@ -1,0 +1,282 @@
+.addSpeaker{
+    height: 100vh;
+}
+
+.addspeakerbtn{
+    width: 95%;
+    color:white;
+    border: 0;
+    background-color:orange;
+    padding:10px 1%;
+    margin: 10px 3%;
+}
+
+.eventcheck{
+    margin:10px 5%;
+    scale: 1.3;
+}
+
+.speakerlist{
+    color: black;
+    display: flex;
+}
+
+.ele{
+    display: flex;
+}
+.home{
+    /*background: radial-gradient(rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255));*/
+    height: 100vh;
+    padding-top: -43px;
+    color: black;
+    width: 100%;
+    margin-bottom: 100px;
+}
+
+.slideimage{
+    width: 100%;
+    height: 100%;
+}
+
+.slidebtndivback{
+    left: 0;
+    top: 300px;
+    position: absolute;
+}
+
+.slidebtndivnext{
+    right: 0;
+    top: 300px;
+    position: absolute;
+}
+
+.slidebtn{
+    background-color: rgba(0, 0, 0, 0);
+    border: 0;
+}
+
+.cards{
+    background: #c3d9e800;
+    height: fit-content;
+    padding: 10px 0;
+    color: white;
+    display: flex;
+    justify-content: center;
+    font-size: 56px;
+    font-weight: 700;
+    flex-wrap: wrap;
+}
+
+.card{
+    cursor: pointer;
+    background: #51c2ff;
+    border-radius: 5px;
+    height: 400px;
+    width: 300px;
+    margin: 20px;
+    position: relative;
+    transition: .4s all;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 0px 16px 1px rgba(0, 0, 0, 0.56);
+}
+
+.card:hover .black{
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.245);
+}
+
+.card:hover .social{
+    height: 40px;
+}
+
+
+.speakername{
+    position: absolute;
+    bottom: 50px;
+    font-size: 0px;
+    z-index: 3;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0px;
+    width: fit-content;
+    color: black;
+    background-color: white;
+    transition: .4s all;
+}
+
+.speaker{
+    color: orange;
+}
+
+.card:hover .speakername{
+    font-size: 18px;
+    padding:5px 20px 10px 10px;
+}
+
+.title{
+    padding: 80px 0 0px;
+    text-align: center;
+    font-size: 44px;
+    font-weight: 700;
+    color: #131C38;
+}
+
+.eventtitle{
+    padding: 80px 0 20px;
+    text-align: center;
+    font-size: 44px;
+    font-weight: 700;
+    color: #131C38;
+}
+
+
+.black{
+    position: absolute;
+    height: 400px;
+    width: 300px;
+    background-color: rgba(0, 0, 0, 0);
+    z-index: 2;
+    top: 0;
+    left: 0;
+    transition: .4s all;
+}
+
+
+.events{
+    height: 70vh;
+    margin:0 30px;
+    display: flex;
+    background-image:linear-gradient( #131C38,#243362);
+    border-radius:0 152px;
+}
+
+.reserve{
+    display: block;
+    width: 50%;
+    font-size: 60px;
+    margin: auto 100px;
+    color: white;
+}
+
+.reservebtn{
+    color: white;
+    background: radial-gradient(rgba(234, 234, 234, 0.3), rgba(255, 255, 255, 0.168), rgba(255, 255, 255, 0.25));
+    border: 0;
+    font-size: 33px;
+    padding: 10px 30px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.img{
+    height: 100%;
+    width: 50%;
+}
+
+.anaspng{
+    display: flex;
+    width: 50%;
+}
+
+.counter{
+    position: absolute;
+    width: fit-content;
+    top: 50%;
+    right: 0;
+    left: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.homeEventTitle{
+    position: absolute;
+    top: 35%;
+    width: fit-content;
+    right: 0;
+    left: 0;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 73px;
+    color: white;
+    text-shadow: 2px 2px 3px black;
+}
+
+.homereserve{
+    position: absolute;
+    width: fit-content;
+    margin-right: auto;
+    margin-left: auto;
+    font-size: 24px;
+    color: white;
+    border: 1px solid white;
+    border-radius: 10px;
+    padding: 10px 20px;
+    right: 0;
+    top: 70%;
+    left: 0;
+    cursor: pointer;
+    transition: .4s;
+}
+
+.homereserve:hover{
+    background-color: #f54d1a39;
+}
+
+.social{
+    position: absolute;
+    right: 0;
+    left: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+    height: 0px;
+    z-index: 3;
+    border-radius:0 0 5px 5px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    transition: .4s;
+    justify-content: space-around;
+
+}
+
+.sinsta{
+    font-size: 30px;
+    background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); 
+    border-radius: 4px;
+    transition: all .3s;
+}
+
+.slinkedin{
+    font-size: 30px;
+    background: #0a66c2; 
+    border-radius: 4px;
+    transition: all .3s;
+}
+
+.sfb{
+    font-size: 30px;
+    background: #0866ff; 
+    border-radius: 4px;
+    transition: all .3s;
+}
+
+.sx{
+    font-size: 30px;
+    background:black; 
+    border-radius: 4px;
+    transition: all .3s;
+}
+
+
+
+.s:hover{
+    background-color:#24b3ff ;
+}
+
+.homepage{
+    background-color: white;
+}

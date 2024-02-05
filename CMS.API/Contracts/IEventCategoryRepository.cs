@@ -1,4 +1,5 @@
-﻿using CMS.API.Entities;
+﻿using CMS.API.DTOs;
+using CMS.API.Entities;
 
 namespace CMS.API.Contracts
 {

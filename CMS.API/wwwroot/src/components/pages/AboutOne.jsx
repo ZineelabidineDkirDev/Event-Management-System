@@ -35,13 +35,13 @@ class AboutOne extends React.Component {
                 {/* Speakers Area */}
                 <Speakers />
                 {/* CTA Are */}
-                <Cta />
+                {/* <Cta /> */}
                 {/* FunFacts Area */}
-                <FunFact />
+                {/* <FunFact /> */}
                 {/* Pricing Area */}
-                <Partner />
+                {/* <Partner /> */}
                 {/* Buy Tickets Area */}
-                <BuyTicket />
+                {/* <BuyTicket /> */}
                 {/* Subscribe Area */}
                 <Subscribe />
 
