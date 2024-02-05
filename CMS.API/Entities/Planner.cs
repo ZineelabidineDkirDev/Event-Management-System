@@ -10,6 +10,7 @@ namespace CMS.API.Entities
         public int Id { get; set; }
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
+        public string Platform { get; set; }
         public string Location { get; set; }
         public string Horizontal { get; set; }
         public string Vertical { get; set; }

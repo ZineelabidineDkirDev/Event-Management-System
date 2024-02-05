@@ -332,6 +332,10 @@ namespace CMS.API.Migrations
                     b.Property<int>("OrganizerId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Platform")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("StartDateTime")
                         .HasColumnType("datetime2");
 

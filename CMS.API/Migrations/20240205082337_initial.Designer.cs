@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240203160745_Initial")]
-    partial class Initial
+    [Migration("20240205082337_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -334,6 +334,10 @@ namespace CMS.API.Migrations
 
                     b.Property<int>("OrganizerId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Platform")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StartDateTime")
                         .HasColumnType("datetime2");

@@ -407,6 +407,7 @@ namespace CMS.API.Services
         public Account UnassignRole(int id)
         {
             var account = _context.Accounts.Find(id);
+           
             if (account == null)
             {
                 throw new AppException("Account not found to assing role");
