@@ -16,7 +16,7 @@ class MainBanner extends React.Component {
     }
 
     makeTimer = () => {
-        let endTime = new Date("January 1, 2023 17:00:00 PDT");			
+        let endTime = new Date("February 25, 2024 17:00:00 PDT");			
         let endTimeParse = (Date.parse(endTime)) / 1000;
         let now = new Date();
         let nowParse = (Date.parse(now) / 1000);
@@ -60,7 +60,7 @@ class MainBanner extends React.Component {
                                     <p>Are you <span><b>ready</b></span> participate to <span><b>MMC</b></span>?</p>
                                     <h1>Moroccan <span>Microsoft</span> <br /> Community <b>2</b><b>0</b><b>2</b><b>4</b></h1>
                                     <ul>
-                                        <li><i className="icofont-compass"></i> <b>Next Event : </b> Gloabl Ai , Tanger</li>
+                                        <li><i className="icofont-compass"></i> <b>Next Event : </b>Technopark Gloabl Ai , Tanger</li>
                                         <li><i className="icofont-calendar"></i> 25-27 Feb, 2024</li>
                                     </ul>
                                     <div className="button-box">
@@ -69,7 +69,7 @@ class MainBanner extends React.Component {
                                             to="/" 
                                             className="video-btn popup-youtube"
                                         >
-                                            <i className="icofont-ui-play"></i> Watch Pormo Video
+                                            <i className="icofont-ui-play"></i> Watch Video
                                         </Link>
                                     </div>
 

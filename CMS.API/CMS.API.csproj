@@ -34,11 +34,21 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\NewFolder\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\src\dashboard\addCategory\addCategory.jsx" />
+    <None Include="wwwroot\src\dashboard\addevents\addEvents.jsx" />
+    <None Include="wwwroot\src\dashboard\addevents\Map.jsx" />
+    <None Include="wwwroot\src\dashboard\addSpeaker\AddSpeaker.jsx" />
+    <None Include="wwwroot\src\dashboard\addSponser\addSponsor.jsx" />
+    <None Include="wwwroot\src\dashboard\Dashboard.jsx" />
   </ItemGroup>
 
 </Project>

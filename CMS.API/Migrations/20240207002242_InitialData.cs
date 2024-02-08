@@ -5,7 +5,7 @@
 namespace CMS.API.Migrations
 {
     /// <inheritdoc />
-    public partial class v2 : Migration
+    public partial class InitialData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

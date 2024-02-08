@@ -20,15 +20,15 @@ class AboutTwo extends React.Component {
                 <About />
                 {/* Why Choose Us Area */}
                 <WhyUs />
-                <Cta />
+                {/* <Cta /> */}
                 {/* Speakers Area */}
-                <Speakers />
+                {/* <Speakers /> */}
                 {/* Partner Area */}
-                <Partner />
+                {/* <Partner /> */}
                 {/* Buy Tickets Area */}
-                <BuyTicket />
+                {/* <BuyTicket /> */}
                 {/* Subscribe Area */}
-                <Subscribe />
+                {/* <Subscribe /> */}
                 {/* Footer Area */}
                 <Footer />
                 {/* Back Top top */}

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CMS.API.Authorization;
 using CMS.API.Contracts;
 using CMS.API.Entities;
 using CMS.API.Helpers;
@@ -63,7 +64,6 @@ namespace CMS.API.Services
         }
 
 
-
         public AuthenticateResponse RefreshToken(string token, string ipAddress)
         {
             var account = getAccountByRefreshToken(token);
@@ -109,12 +109,12 @@ namespace CMS.API.Services
             _context.SaveChanges();
         }
 
-        public void Register(RegisterRequest model, string origin)
+        public bool Register(RegisterRequest model, string origin)
         {
             if (_context.Accounts.Any(x => x.Email == model.Email))
             {
                 sendAlreadyRegisteredEmail(model.Email, origin);
-                return;
+                return false;
             }
 
             var account = _mapper.Map<Account>(model);
@@ -131,6 +131,7 @@ namespace CMS.API.Services
             _context.SaveChanges();
 
             sendVerificationEmail(model.Email, account, origin);
+            return true;
         }
 
 
@@ -336,18 +337,18 @@ namespace CMS.API.Services
             {
                 var verifyUrl = $"{origin}/account/verify-email?token={account.VerificationToken}";
                 message = $@"<p>Please click the below link to verify your email address:</p>
-                            <p><a href=""{verifyUrl}"">{verifyUrl}</a></p>";
+<p><a href=""{verifyUrl}"">{verifyUrl}</a></p>";
             }
             else
             {
                 message = $@"<p>Please use the below token to verify your email address with the <code>/accounts/verify-email</code> api route:</p>
-                            <p><code>{account.VerificationToken}</code></p>";
+<p><code>{account.VerificationToken}</code></p>";
             }
             _emailService.Send(
                 to: email,
                 subject: "Sign-up Verification API - Verify Email",
                 html: $@"<h4>Verify Email</h4>
-                        <p>Thanks for registering!</p>
+<p>Thanks for registering!</p>
                         {message}"
             );
         }
@@ -364,7 +365,7 @@ namespace CMS.API.Services
                 to: email,
                 subject: "Sign-up Verification API - Email Already Registered",
                 html: $@"<h4>Email Already Registered</h4>
-                        <p>Your email <strong>{email}</strong> is already registered.</p>
+<p>Your email <strong>{email}</strong> is already registered.</p>
                         {message}"
             );
         }
@@ -376,12 +377,12 @@ namespace CMS.API.Services
             {
                 var resetUrl = $"{origin}/account/reset-password?token={account.ResetToken}";
                 message = $@"<p>Please click the below link to reset your password, the link will be valid for 1 day:</p>
-                            <p><a href=""{resetUrl}"">{resetUrl}</a></p>";
+<p><a href=""{resetUrl}"">{resetUrl}</a></p>";
             }
             else
             {
                 message = $@"<p>Please use the below token to reset your password with the <code>/accounts/reset-password</code> api route:</p>
-                            <p><code>{account.ResetToken}</code></p>";
+<p><code>{account.ResetToken}</code></p>";
             }
             _emailService.Send(
                 to: email,
@@ -407,7 +408,6 @@ namespace CMS.API.Services
         public Account UnassignRole(int id)
         {
             var account = _context.Accounts.Find(id);
-
             if (account == null)
             {
                 throw new AppException("Account not found to assing role");

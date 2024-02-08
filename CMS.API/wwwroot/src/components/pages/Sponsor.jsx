@@ -5,7 +5,7 @@ import OwlCarousel from 'react-owl-carousel3';
 import PlatinumSponsors from '../LaxButton/PlatinumSponsors';
 import GoldSponsors from '../LaxButton/GoldSponsors';
 import Footer from '../Common/Footer';
-
+import axios from 'axios';
 const options = {
     loop: true,
     nav: true,
@@ -32,15 +32,36 @@ const options = {
 class Sponsor extends React.Component {
     constructor(props) {
         super(props)
+        this.state = {
+            sponsors: [],
+            loading: true,
+          };
+       
+     
         lax.setup()
-    
+   
         document.addEventListener('scroll', function(x) {
             lax.update(window.scrollY)
         }, false)
-    
+   
         lax.update(window.scrollY)
     }
+ 
+    componentDidMount() {
+        this.fetchSponsor();
+      }
+   
+      async fetchSponsor() {
+        try {
+          const response = await axios.get('https://localhost:7062/api/Sponsor');
+          this.setState({ sponsors: response.data, loading: false });
+        } catch (error) {
+          console.error('Error fetching sponsor:', error);
+          this.setState({ loading: false });
+        }
+      }
     render(){
+        const {sponsors} =this.state
         return (
             <React.Fragment>
                 <div className="page-title-area item-bg2">
@@ -53,7 +74,7 @@ class Sponsor extends React.Component {
                         </ul>
                     </div>
                 </div>
-
+ 
                 <section className="partner-area ptb-120">
                     <div className="container">
                         <div className="row">
@@ -62,45 +83,57 @@ class Sponsor extends React.Component {
                                     <PlatinumSponsors />
                                 </div>
                             </div>
-
-                            <OwlCarousel 
+ 
+                            <OwlCarousel
                                 className="platinum-partner-slides owl-carousel owl-theme"
                                 {...options}
                             >
+                                {sponsors.filter(sp => sp.type === "Platinium").map((sponsor, id) => (
                                 <div className="col-lg-12 col-md-12">
-                                    <div className="partner-item">
-                                        <Link to="#">
-                                            <img src={require("../../assets/images/platinum-partner1.png")} alt="sponsor" />
-                                            <img src={require("../../assets/images/platinum-partner1.png")} alt="sponsor" />
-                                        </Link>
+                                  
+                                  <div className="partner-item m-1" >
+                                  
+                                  <a href="#" key={id}>
+                                      <img src={sponsor.logoName} alt={sponsor.name} width={100} height={100}/>
+                                      <h6></h6>
+                                  </a>
+                                  
+                                 </div> 
+                                       
                                     </div>
-                                </div>
+                                    ))}
+               
                             </OwlCarousel>
-
+ 
                             <div className="col-lg-12">
                                 <div className="border"></div>
                             </div>
-
+ 
                             <div className="col-lg-12">
                                 <div className="partner-title gold-sponsor">
                                     <GoldSponsors />
                                 </div>
                             </div>
-
-                            <OwlCarousel 
+ 
+                            <OwlCarousel
                                 className="gold-partner-slides owl-carousel owl-theme"
                                 {...options}
                             >
+                                {sponsors.filter(sp => sp.type === "Gold").map((sponsor, id) => (
                                 <div className="col-lg-12 col-md-12">
-                                    <div className="partner-item">
-                                        <Link to="#">
-                                            <img src={require("../../assets/images/gold-partner1.png")} alt="sponsor" />
-                                            <img src={require("../../assets/images/gold-partner1.png")} alt="sponsor" />
-                                        </Link>
+                                  
+                                  <div className="partner-item m-1" >
+                                  
+                                  <a href="#" key={id}>
+                                      <img src={sponsor.logoName} alt={sponsor.name} width={100} height={100}/>
+                                      <h6></h6>
+                                  </a>
+                                  
+                                 </div> 
+                                       
                                     </div>
-                                </div>
-
-                                
+                                    ))}
+               
                             </OwlCarousel>
                         </div>
                     </div>

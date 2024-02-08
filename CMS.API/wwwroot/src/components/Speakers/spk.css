@@ -1,0 +1,26 @@
+/* Pagination Styling */
+#page-numbers {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  #page-numbers li {
+    margin: 0 5px;
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  #page-numbers li:hover {
+    background-color: #f0f0f0;
+  }
+  
+  #page-numbers li.active {
+    background-color: #EFA506;
+    color: #fff;
+  }
+  

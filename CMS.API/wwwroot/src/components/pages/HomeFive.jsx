@@ -33,19 +33,19 @@ class HomeDefault extends React.Component {
                 {/* About Area */}
                 <About />
                 {/* Why Choose Us Area */}
-                <WhyUs />
+                {/* <WhyUs /> */}
                 {/* Speakers Area */}
                 <Speakers />
                 {/* Schedule Area */}
-                <EventSchedules />
+                {/* <EventSchedules /> */}
                 {/* FunFacts Area */}
-                <FunFact />
+                {/* <FunFact /> */}
                 {/* Pricing Area */}
-                <Pricing />
+                {/* <Pricing /> */}
                 {/* Partner Area */}
                 <Partner />
                 {/* Blog Area */}
-                <LatestNews />
+                {/* <LatestNews /> */}
                 {/* Buy Tickets Area */}
                 <BuyTicket />
                 {/* Subscribe Area */}

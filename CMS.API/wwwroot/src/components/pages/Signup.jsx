@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios'
-class Signup extends React.Component {
-    state = {
+const Signup =() => {
+    const [state,setState] =useState( {
         title: "",
         firstName: "",
         lastName: "",
@@ -10,15 +10,25 @@ class Signup extends React.Component {
         password: "",
         confirmPassword: "",
         acceptTerms: true
-    };
+    });
+    
+        const[verify,setverify]=useState(true)
+        const[msg,setMsg] = useState("");
+        const onSubmit = (e) => {
 
-    onSubmit = (e) => {
-        e.preventDefault();
-        axios.post("http://localhost:5164/Accounts/register",this.state).then((res)=>{
-            console.log(res.data.message)
-        })
-    }
-    render(){
+            e.preventDefault();
+            axios.post("https://localhost:7062/Accounts/register",state).then((res)=>{
+                
+                console.log(res.data.message);
+                setMsg(res.data.message);
+                if(res.data.message ==! "Your Email is already exist")
+                {
+                    setverify(false)
+                }
+                
+            })
+        }
+
         return (
             <section className="signup-area">
                 <div className="d-table">
@@ -26,15 +36,15 @@ class Signup extends React.Component {
                         <div className="signup-form">
                             <h3>Create your Account</h3>
 
-                            <form onSubmit={this.onSubmit}>
-
+                            <form onSubmit={onSubmit}>
+                            {verify && msg==!"Your Email is already exist"? <>
                                 <div className="from-group" style={{marginLeft:"7px"}}>
                                 <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="radio" name="title" id="inlineRadio1" value="Male" onClick={e => this.setState({ title: e.target.value })}/>
+                                    <input className="form-check-input" type="radio" name="title" id="inlineRadio1" value="Male" onClick={e => setState({...state, title: e.target.value })}/>
                                     <label className="form-check-label" htmlFor="inlineRadio1">Mr</label>
                                 </div>
                                 <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="radio" name="title" id="inlineRadio2" value="Female" onClick={e => this.setState({ title: e.target.value })}/>
+                                    <input className="form-check-input" type="radio" name="title" id="inlineRadio2" value="Female" onClick={e => setState({...state, title: e.target.value })}/>
                                     <label className="form-check-label" htmlFor="inlineRadio2">Mrs</label>
                                 </div>
                                 </div>
@@ -44,8 +54,8 @@ class Signup extends React.Component {
                                         type="text" 
                                         className="form-control" style={{padding:"10px", height:"45px"}}
                                         placeholder="First name" 
-                                        value={this.state.firstName}
-                                        onChange={e => this.setState({ firstName: e.target.value })}
+                                        value={state.firstName}
+                                        onChange={e => setState({...state, firstName: e.target.value })}
                                     />
                                 </div>
 
@@ -54,8 +64,8 @@ class Signup extends React.Component {
                                         type="text" 
                                         className="form-control" style={{padding:"10px", height:"45px"}}
                                         placeholder="Last name" 
-                                        value={this.state.lastName}
-                                        onChange={e => this.setState({ lastName: e.target.value })}
+                                        value={state.lastName}
+                                        onChange={e => setState({...state, lastName: e.target.value })}
                                     />
                                 </div>
 
@@ -64,8 +74,8 @@ class Signup extends React.Component {
                                         type="email" 
                                         className="form-control" style={{padding:"10px", height:"45px"}}
                                         placeholder="Email Address" 
-                                        value={this.state.email}
-                                        onChange={e => this.setState({ email: e.target.value })}
+                                        value={state.email}
+                                        onChange={e => setState({...state, email: e.target.value })}
                                     />
                                 </div>
 
@@ -74,8 +84,8 @@ class Signup extends React.Component {
                                         type="password" 
                                         className="form-control" style={{padding:"10px", height:"45px"}}
                                         placeholder="Password" 
-                                        value={this.state.password}
-                                        onChange={e => this.setState({ password: e.target.value })}
+                                        value={state.password}
+                                        onChange={e => setState({...state, password: e.target.value })}
                                     />
                                 </div>
                                 
@@ -84,21 +94,22 @@ class Signup extends React.Component {
                                         type="password" 
                                         className="form-control" style={{padding:"10px", height:"45px"}}
                                         placeholder="confirm password" 
-                                        value={this.state.confirmPassword}
-                                        onChange={e => this.setState({ confirmPassword: e.target.value })}
+                                        value={state.confirmPassword}
+                                        onChange={e => setState({...state, confirmPassword: e.target.value })}
                                     />
                                 </div>
+                                <span className='text-primary'>{msg}</span>
+                                <button type="submit"  className="btn btn-primary">Signup</button>
 
-                                <button type="submit" className="btn btn-primary">Signup</button>
-
-                                <p>Already a registered user? <Link to="/login">Login!</Link></p>
-                            </form>
+                                <p>Already a registered user? <Link to="/login">Login!</Link></p></>
+                                :<a className="btn btn-primary" href="https://gmail.com/">check your email</a>}
+                                </form>
                         </div>
                     </div>
                 </div>
             </section>
         );
     }
-}
+
  
 export default Signup;

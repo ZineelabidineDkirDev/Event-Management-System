@@ -24,7 +24,7 @@ namespace CMS.API.Controllers
         public async Task<IActionResult> GetApplicationSettings()
         {
             var applicationSettings = await _applicationSettingsRepository.GetApplicationSettings();
-            var applicationSettingsDTO = _mapper.Map<IEnumerable<ApplicationSettingsDTO>>(applicationSettings);
+            var applicationSettingsDTO = _mapper.Map<ApplicationSettingsDTO>(applicationSettings);
             return Ok(applicationSettingsDTO);
         }
 
@@ -52,3 +52,4 @@ namespace CMS.API.Controllers
         }
     }
 }
+

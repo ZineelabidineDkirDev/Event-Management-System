@@ -31,7 +31,7 @@ namespace CMS.API.Controllers
         public async Task<IActionResult> GetPlannerSpeakerById(int plannerSpeakerId)
         {
             var plannerSpeaker = await _plannerSpeakerRepository.GetPlannerSpeakerById(plannerSpeakerId);
-            var plannerSpeakerDTO = _mapper.Map<PlannerSpeakerDTO>(plannerSpeaker);
+            var plannerSpeakerDTO = _mapper.Map<IEnumerable<PlannerSpeakerDTO>>(plannerSpeaker);
             return Ok(plannerSpeakerDTO);
         }
 

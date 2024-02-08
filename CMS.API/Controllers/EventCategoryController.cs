@@ -21,12 +21,13 @@ namespace CMS.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EventCategory>>> GetEventCategories()
+        public async Task<IActionResult> GetEventCategories()
         {
             try
             {
-                var eventCategories = await _eventCategoryRepository.GetEventCategories();
-                return Ok(eventCategories);
+                var eventCatg = await _eventCategoryRepository.GetEventCategories();
+                var categoriesDTO = _mapper.Map<IEnumerable<EventCategoryDTO>>(eventCatg);
+                return Ok(categoriesDTO);
             }
             catch (Exception ex)
             {

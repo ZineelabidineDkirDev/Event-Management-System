@@ -17,6 +17,7 @@ const About = () => {
         const response = await axios.get(`https://localhost:7062/api/Speaker/${id}`);
         setSpeaker(response.data);
         setLoading(false); // Corrected the loading state
+        console.log(speaker.imageName);
       } catch (error) {
         console.error('Error fetching speaker:', error);
         setLoading(false);
@@ -41,11 +42,12 @@ const About = () => {
 {loading ? (
               <p>Loading speaker...</p>
             ) : (
+                
     <div className="row h-100 align-items-center">
         <div className="col-lg-6">
             <div className="about-image">
             <img
-                  src={`/${speaker.imageName}`}
+                  src={`/${speaker.imageName} `}
                   alt={speaker.name}
                   height={600}
                   width={550}

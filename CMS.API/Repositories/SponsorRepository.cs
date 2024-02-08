@@ -28,6 +28,7 @@ namespace CMS.API.Repositories
 
         public async Task<int> CreateSponsor(Sponsor sponsor)
         {
+
             try
             {
                 string folder = Path.Combine(_webHost.WebRootPath, "public");
@@ -42,8 +43,6 @@ namespace CMS.API.Repositories
 
                 sponsor.LogoName = uniqueFileName;
 
-                sponsor.Id = 0;
-
                 _context.Sponsors.Add(sponsor);
                 await _context.SaveChangesAsync();
 
@@ -53,58 +52,24 @@ namespace CMS.API.Repositories
                 {
                     await sponsor.Logo.CopyToAsync(fileStream);
                 }
-
                 Console.WriteLine("Uploaded");
-                return sponsor.Id;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
-                return 0;
             }
+            return sponsor.Id;
         }
-
 
         public async Task<int> UpdateSponsor(Sponsor sponsor)
         {
             var existingEntity = await _context.Sponsors.FindAsync(sponsor.Id);
 
             if (existingEntity == null)
-                return 0;
-
-            if (!string.IsNullOrEmpty(existingEntity.LogoName))
-            {
-                string filePath = Path.Combine(_webHost.WebRootPath, "public", existingEntity.LogoName);
-                if (File.Exists(filePath))
-                {
-                    File.Delete(filePath);
-                }
-            }
+                return 0; 
 
             _context.Entry(existingEntity).CurrentValues.SetValues(sponsor);
-
-            await _context.SaveChangesAsync();
-
-            if (sponsor.Logo != null)
-            {
-                string folder = Path.Combine(_webHost.WebRootPath, "public");
-                string originalFileName = Path.GetFileNameWithoutExtension(sponsor.Logo.FileName);
-                string fileExtension = Path.GetExtension(sponsor.Logo.FileName);
-                string uniqueFileName = $"{originalFileName}_{DateTime.Now:yyyyMMddHHmmssfff}{fileExtension}";
-
-                existingEntity.LogoName = uniqueFileName;
-
-                string filePath = Path.Combine(folder, uniqueFileName);
-
-                using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await sponsor.Logo.CopyToAsync(fileStream);
-                }
-
-                await _context.SaveChangesAsync();
-            }
-
-            return existingEntity.Id;
+            return await _context.SaveChangesAsync();
         }
 
         public async Task<int> DeleteSponsor(int id)
@@ -113,15 +78,6 @@ namespace CMS.API.Repositories
 
             if (existingEntity == null)
                 return 0;
-
-            if (!string.IsNullOrEmpty(existingEntity.LogoName))
-            {
-                string filePath = Path.Combine(_webHost.WebRootPath, "public", existingEntity.LogoName);
-                if (File.Exists(filePath))
-                {
-                    File.Delete(filePath);
-                }
-            }
 
             _context.Sponsors.Remove(existingEntity);
             return await _context.SaveChangesAsync();

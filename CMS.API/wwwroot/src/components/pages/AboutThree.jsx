@@ -30,7 +30,7 @@ class AboutThree extends React.Component {
                 {/* Buy Tickets Area */}
                 {/* <BuyTicket /> */}
                 {/* Subscribe Area */}
-                <Subscribe />
+                {/* <Subscribe /> */}
                 {/* Footer Area */}
                 <Footer />
                 {/* Back Top top */}

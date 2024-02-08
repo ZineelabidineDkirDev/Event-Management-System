@@ -29,16 +29,9 @@ class About extends React.Component {
                                 
                                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
 
-                                <div className="signature">
-                                    <img src={require("../../assets/images/signature.png")} alt="signature" />
-                                </div>
+                              
 
-                                <Link to="/about-3" className="btn btn-primary">
-                                    Read More 
-                                    <i className="icofont-double-right"></i>
-                                </Link>
-
-                                <Link to="#" className="btn btn-secondary">Buy Ticket</Link>
+                               
                             </div>
                         </div>
 
@@ -50,7 +43,7 @@ class About extends React.Component {
 
                                 <img src={require("../../assets/images/shapes/5.png")} className="shape-img" alt="about" />
 
-                                <LaxButton buttonText="Explore More About" />
+                                <Link to="/schedule-1" className="btn btn-primary">Discover the Event!</Link>
                             </div>
                         </div>
                     </div>

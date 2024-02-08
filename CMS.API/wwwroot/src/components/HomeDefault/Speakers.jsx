@@ -1,238 +1,88 @@
-import React from 'react';
-import lax from 'lax.js';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import LaxDiv from '../Shared/LaxDiv';
- 
-class Speakers extends React.Component {
+import axios from 'axios';
+import {FaInstagram,FaXTwitter,FaLinkedin} from 'react-icons/fa6'
 
-    constructor(props) {
-        super(props)
-        lax.setup()
-    
-        document.addEventListener('scroll', function(x) {
-            lax.update(window.scrollY)
-        }, false)
-    
-        lax.update(window.scrollY)
+class SpeakersOne extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      speakers: [],
+      loading: true,
+    };
+  }
+
+  componentDidMount() {
+    this.fetchSpeakers();
+  }
+
+  async fetchSpeakers() {
+    try {
+      const response = await axios.get('https://localhost:7062/api/Speaker');
+      this.setState({ speakers: response.data, loading: false });
+    } catch (error) {
+      console.error('Error fetching speakers:', error);
+      this.setState({ loading: false });
     }
+  }
 
-    render(){
-        return (
-            <section className="speakers-area ptb-120 pb-0">
-                <div className="container">
-                    <div className="section-title">
-                        <span>Listen to the Event Speakers</span>
-                        <h2>Who's Speaking</h2>
+  render() {
+    const { speakers, loading } = this.state;
+
+    return (
+      <section className="schedule-area container speakers-area">
+        <div className="row m-5">
+        <div className="section-title">
+                        <span>One Team One Dream</span>
+                        <h2>Speakers</h2>
+                        <Link to="/speakers-1" className="btn btn-primary">Join Speakers!</Link>
+
                         <div className="bar"></div>
-                        <LaxDiv text="Speakers" dataPreset="driftRight" />
-                        <Link to="#" className="btn btn-primary">View More Speakers</Link>
                     </div>
-                </div>
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            speakers.map((speaker) => (
 
-                <div className="row m-0">
-                    <div className="col-lg-3 col-sm-6 p-0">
-                        <div className="single-speakers">
-                            <img src={require("../../assets/images/speakers1.jpg")} alt="Speaker" />
+              <div key={speaker.id} className="col-lg-4 col-sm-4 p-0 mb-4">
+                        <div className="elkevent-single-speakers">
+                        <Link to={`/speaker-detail/${speaker.id}`}>
+                          <img src={speaker.imageName} alt={speaker.name} width={450} height={500} style={{borderRadius:'10px'}} />
+                        </Link>
 
                             <div className="speakers-content">
-                                <h3><Link to="#">James Anderson</Link></h3>
-                                <span>Founder & CEO</span>
+                              <h3>
+                                <Link to={`/speaker-detail/${speaker.id}`}>{speaker.name}</Link>
+                              </h3>
+                              <span><b>{speaker.company}</b></span>
+                              <p>{speaker.position}</p>
                             </div>
                             <ul>
+                                  <li>
+                                  <Link to={speaker.instagramProfile} target="_blank" className="twitter">
+                                    <FaInstagram />
+                                    </Link>
+                                  </li>
                                 <li>
-                                    <Link to="https://www.facebook.com/" target="_blank" className="facebook"><i className="icofont-facebook"></i></Link>
+                                <Link to={speaker.linkedInProfile} target="_blank" className="linkedin">
+                                <FaLinkedin />
+                                </Link>
                                 </li>
                                 <li>
-                                    <Link to="https://twitter.com/" target="_blank" className="twitter"><i className="icofont-twitter"></i></Link>
+                                <Link to={speaker.twitterProfile} target="_blank" className="twitter">
+                                  <FaXTwitter />
+                                  </Link>
                                 </li>
-                                <li>
-                                    <Link to="https://www.instagram.com/" target="_blank" className="instagram"><i className="icofont-instagram"></i></Link>
-                                </li>
-                                <li>
-                                    <Link to="https://www.linkedin.com/" target="_blank" className="linkedin"><i className="icofont-linkedin"></i></Link>
-                                </li>
+                              
                             </ul>
                         </div>
                     </div>
-
-                    <div className="col-lg-3 col-sm-6 p-0">
-                        <div className="single-speakers">
-                            <img src={require("../../assets/images/speakers2.jpg")} alt="Speaker" />
-
-                            <div className="speakers-content">
-                                <h3><Link to="#">Steven Smith</Link></h3>
-                                <span>Lead Designer</span>
-                            </div>
-                            <ul>
-                                <li>
-                                    <Link to="https://www.facebook.com/" target="_blank" className="facebook"><i className="icofont-facebook"></i></Link>
-                                </li>
-                                <li>
-                                    <Link to="https://twitter.com/" target="_blank" className="twitter"><i className="icofont-twitter"></i></Link>
-                                </li>
-                                <li>
-                                    <Link to="https://www.instagram.com/" target="_blank" className="instagram"><i className="icofont-instagram"></i></Link>
-                                </li>
-                                <li>
-                                    <Link to="https://www.linkedin.com/" target="_blank" className="linkedin"><i className="icofont-linkedin"></i></Link>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div className="col-lg-3 col-sm-6 p-0">
-                        <div className="single-speakers">
-                            <img src={require("../../assets/images/speakers3.jpg")} alt="Speaker" />
-
-                            <div className="speakers-content">
-                                <h3><Link to="#">Lucy Mandana</Link></h3>
-                                <span>Developer Expert</span>
-                            </div>
-                            <ul>
-                                <li>
-                                    <Link to="https://www.facebook.com/" target="_blank" className="facebook"><i className="icofont-facebook"></i></Link>
-                                </li>
-                                <li>
-                                    <Link to="https://twitter.com/" target="_blank" className="twitter"><i className="icofont-twitter"></i></Link>
-                                </li>
-                                <li>
-                                    <Link to="https://www.instagram.com/" target="_blank" className="instagram"><i className="icofont-instagram"></i></Link>
-                                </li>
-                                <li>
-                                    <Link to="https://www.linkedin.com/" target="_blank" className="linkedin"><i className="icofont-linkedin"></i></Link>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div className="col-lg-3 col-sm-6 p-0">
-                        <div className="single-speakers">
-                            <img src={require("../../assets/images/speakers4.jpg")} alt="Speaker" />
-
-                            <div className="speakers-content">
-                                <h3><Link to="#">David Warner</Link></h3>
-                                <span>Senio Visual Designer</span>
-                            </div>
-                            <ul>
-                                <li>
-                                    <Link to="https://www.facebook.com/" target="_blank" className="facebook"><i className="icofont-facebook"></i></Link>
-                                </li>
-                                <li>
-                                    <Link to="https://twitter.com/" target="_blank" className="twitter"><i className="icofont-twitter"></i></Link>
-                                </li>
-                                <li>
-                                    <Link to="https://www.instagram.com/" target="_blank" className="instagram"><i className="icofont-instagram"></i></Link>
-                                </li>
-                                <li>
-                                    <Link to="https://www.linkedin.com/" target="_blank" className="linkedin"><i className="icofont-linkedin"></i></Link>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div className="col-lg-3 col-sm-6 p-0">
-                        <div className="single-speakers">
-                            <img src={require("../../assets/images/speakers5.jpg")} alt="Speaker" />
-
-                            <div className="speakers-content">
-                                <h3><Link to="#">Alberta Amelia</Link></h3>
-                                <span>Lead Designer</span>
-                            </div>
-                            <ul>
-                                <li>
-                                    <Link to="https://www.facebook.com/" target="_blank" className="facebook"><i className="icofont-facebook"></i></Link>
-                                </li>
-                                <li>
-                                    <Link to="https://twitter.com/" target="_blank" className="twitter"><i className="icofont-twitter"></i></Link>
-                                </li>
-                                <li>
-                                    <Link to="https://www.instagram.com/" target="_blank" className="instagram"><i className="icofont-instagram"></i></Link>
-                                </li>
-                                <li>
-                                    <Link to="https://www.linkedin.com/" target="_blank" className="linkedin"><i className="icofont-linkedin"></i></Link>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div className="col-lg-3 col-sm-6 p-0">
-                        <div className="single-speakers">
-                            <img src={require("../../assets/images/speakers6.jpg")} alt="Speaker" />
-
-                            <div className="speakers-content">
-                                <h3><Link to="#">Abbie Edie</Link></h3>
-                                <span>Lead Designer</span>
-                            </div>
-                            <ul>
-                                <li>
-                                    <Link to="https://www.facebook.com/" target="_blank" className="facebook"><i className="icofont-facebook"></i></Link>
-                                </li>
-                                <li>
-                                    <Link to="https://twitter.com/" target="_blank" className="twitter"><i className="icofont-twitter"></i></Link>
-                                </li>
-                                <li>
-                                    <Link to="https://www.instagram.com/" target="_blank" className="instagram"><i className="icofont-instagram"></i></Link>
-                                </li>
-                                <li>
-                                    <Link to="https://www.linkedin.com/" target="_blank" className="linkedin"><i className="icofont-linkedin"></i></Link>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div className="col-lg-3 col-sm-6 p-0">
-                        <div className="single-speakers">
-                            <img src={require("../../assets/images/speakers7.jpg")} alt="Speaker" />
-
-                            <div className="speakers-content">
-                                <h3><Link to="#">Steven Garrad</Link></h3>
-                                <span>Developer Expert</span>
-                            </div>
-                            <ul>
-                                <li>
-                                    <Link to="https://www.facebook.com/" target="_blank" className="facebook"><i className="icofont-facebook"></i></Link>
-                                </li>
-                                <li>
-                                    <Link to="https://twitter.com/" target="_blank" className="twitter"><i className="icofont-twitter"></i></Link>
-                                </li>
-                                <li>
-                                    <Link to="https://www.instagram.com/" target="_blank" className="instagram"><i className="icofont-instagram"></i></Link>
-                                </li>
-                                <li>
-                                    <Link to="https://www.linkedin.com/" target="_blank" className="linkedin"><i className="icofont-linkedin"></i></Link>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div className="col-lg-3 col-sm-6 p-0">
-                        <div className="single-speakers">
-                            <img src={require("../../assets/images/speakers8.jpg")} alt="Speaker" />
-
-                            <div className="speakers-content">
-                                <h3><Link to="#">David Wiley</Link></h3>
-                                <span>Senio Visual Designer</span>
-                            </div>
-                            <ul>
-                                <li>
-                                    <Link to="https://www.facebook.com/" target="_blank" className="facebook"><i className="icofont-facebook"></i></Link>
-                                </li>
-                                <li>
-                                    <Link to="https://twitter.com/" target="_blank" className="twitter"><i className="icofont-twitter"></i></Link>
-                                </li>
-                                <li>
-                                    <Link to="https://www.instagram.com/" target="_blank" className="instagram"><i className="icofont-instagram"></i></Link>
-                                </li>
-                                <li>
-                                    <Link to="https://www.linkedin.com/" target="_blank" className="linkedin"><i className="icofont-linkedin"></i></Link>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        );
-    }
+            ))
+          )}
+        </div>
+      </section>
+    );
+  }
 }
- 
-export default Speakers;
+
+export default SpeakersOne;

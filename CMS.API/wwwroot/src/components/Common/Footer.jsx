@@ -11,15 +11,15 @@ class Footer extends React.Component {
                             <div className="single-footer-widget">
                                 <h3>Venue Location</h3>
                                 <span>
-                                    <i className="icofont-calendar"></i> 23-27 January, 2020
+                                    <i className="icofont-calendar"></i> Rabat - Morocco
                                 </span>
 
                                 <p className="location">
-                                    <i className="icofont-google-map"></i> 241 Yellow Street, San Francisco, United State
+                                    <i className="icofont-google-map"></i> Technopark, Rabat
                                 </p>
 
                                 <Link to="/contact" className="contact-authority">
-                                    <i className="icofont-phone"></i> Contact Our Authority
+                                    <i className="icofont-phone"></i> +212 672828299
                                 </Link>
                             </div>
                         </div>
@@ -31,22 +31,17 @@ class Footer extends React.Component {
                                 
                                 <ul className="social-links">
                                     <li>
-                                        <Link to="https://www.facebook.com/" className="facebook" target="_blank">
-                                            <i className="icofont-facebook"></i>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="https://twitter.com/" className="twitter" target="_blank">
+                                        <Link to="https://twitter.com/mmc" className="twitter" target="_blank">
                                             <i className="icofont-twitter"></i>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="https://www.linkedin.com/" className="linkedin" target="_blank">
+                                        <Link to="https://www.linkedin.com/mmc" className="linkedin" target="_blank">
                                             <i className="icofont-linkedin"></i>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link to="https://www.instagram.com/" className="instagram" target="_blank">
+                                        <Link to="https://www.instagram.com/mmc" className="instagram" target="_blank">
                                             <i className="icofont-instagram"></i>
                                         </Link>
                                     </li>
@@ -58,18 +53,17 @@ class Footer extends React.Component {
                             <div className="copyright-area">
                                 <div className="logo">
                                     <Link to="/">
-                                        <img src={require("../../assets/images/logo.png")} alt="logo" />
+                                        <img src="logo.png" alt="logo" />
                                     </Link>
                                 </div>
                                 <ul>
-                                    <li><Link to="/blog-1">Blog</Link></li>
-                                    <li><Link to="/contact">Contact</Link></li>
-                                    <li><Link to="#">Ticket</Link></li>
-                                    <li><Link to="#">Venue</Link></li>
+                                    <li><Link to="/schedule-1">Event</Link></li>
+                                    <li><Link to="/speakers-1">Speakers</Link></li>
+                                    <li><Link to="#">Home</Link></li>
                                     <li><Link to="#">Terms & Conditions</Link></li>
                                 </ul>
                                 <p>
-                                    Copyright <i className="icofont-copyright"></i> 2022 Evnia. All rights reserved
+                                    Copyright <i className="icofont-copyright"></i> 2024 MMC. All rights reserved
                                 </p>
                             </div>
                         </div>

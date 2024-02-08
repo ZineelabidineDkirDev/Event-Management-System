@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CMS.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240205091411_v9")]
-    partial class v9
+    [Migration("20240207003549_InitialData10")]
+    partial class InitialData10
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -166,7 +166,7 @@ namespace CMS.API.Migrations
                     b.Property<int>("AccountId")
                         .HasColumnType("int");
 
-                    b.Property<int>("EventId")
+                    b.Property<int?>("EventId")
                         .HasColumnType("int");
 
                     b.Property<bool>("HasAttended")
@@ -175,7 +175,7 @@ namespace CMS.API.Migrations
                     b.Property<int>("ParticipantId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PlannerId")
+                    b.Property<int>("PlannerId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("RegistrationDate")
@@ -587,19 +587,19 @@ namespace CMS.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CMS.API.Entities.Event", "Event")
+                    b.HasOne("CMS.API.Entities.Event", null)
                         .WithMany("Attendances")
-                        .HasForeignKey("EventId")
+                        .HasForeignKey("EventId");
+
+                    b.HasOne("CMS.API.Entities.Planner", "Planner")
+                        .WithMany("Attendances")
+                        .HasForeignKey("PlannerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("CMS.API.Entities.Planner", null)
-                        .WithMany("Attendances")
-                        .HasForeignKey("PlannerId");
-
                     b.Navigation("Account");
 
-                    b.Navigation("Event");
+                    b.Navigation("Planner");
                 });
 
             modelBuilder.Entity("CMS.API.Entities.EventCategory", b =>

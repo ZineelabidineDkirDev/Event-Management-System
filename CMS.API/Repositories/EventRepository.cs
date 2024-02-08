@@ -1,7 +1,10 @@
-﻿using CMS.API.Contracts;
+﻿using AutoMapper;
+using CMS.API.Contracts;
 using CMS.API.Entities;
 using CMS.API.Helpers;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Http.Headers;
 
 namespace CMS.API.Repositories
 {
@@ -31,41 +34,10 @@ namespace CMS.API.Repositories
             var existingEntity = await _context.Events.FindAsync(eventEntity.Id);
 
             if (existingEntity == null)
-                return 0;
-
-            if (!string.IsNullOrEmpty(existingEntity.ImageName))
-            {
-                string filePath = Path.Combine(_webHost.WebRootPath, "public", existingEntity.ImageName);
-                if (File.Exists(filePath))
-                {
-                    File.Delete(filePath);
-                }
-            }
+                return 0; 
 
             _context.Entry(existingEntity).CurrentValues.SetValues(eventEntity);
-
-            await _context.SaveChangesAsync();
-
-            if (eventEntity.Image != null)
-            {
-                string folder = Path.Combine(_webHost.WebRootPath, "public");
-                string originalFileName = Path.GetFileNameWithoutExtension(eventEntity.Image.FileName);
-                string fileExtension = Path.GetExtension(eventEntity.Image.FileName);
-                string uniqueFileName = $"{originalFileName}_{DateTime.Now:yyyyMMddHHmmssfff}{fileExtension}";
-
-                existingEntity.ImageName = uniqueFileName;
-
-                string filePath = Path.Combine(folder, uniqueFileName);
-
-                using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await eventEntity.Image.CopyToAsync(fileStream);
-                }
-
-                await _context.SaveChangesAsync();
-            }
-
-            return existingEntity.Id;
+            return await _context.SaveChangesAsync();
         }
 
         public async Task<int> DeleteEvent(int id)
@@ -73,16 +45,7 @@ namespace CMS.API.Repositories
             var existingEntity = await _context.Events.FindAsync(id);
 
             if (existingEntity == null)
-                return 0;
-
-            if (!string.IsNullOrEmpty(existingEntity.ImageName))
-            {
-                string filePath = Path.Combine(_webHost.WebRootPath, "public", existingEntity.ImageName);
-                if (File.Exists(filePath))
-                {
-                    File.Delete(filePath);
-                }
-            }
+                return 0; 
 
             _context.Events.Remove(existingEntity);
             return await _context.SaveChangesAsync();
@@ -104,25 +67,8 @@ namespace CMS.API.Repositories
 
                 eventEntity.ImageName = uniqueFileName;
 
-                eventEntity.Id = 0;
-
                 _context.Events.Add(eventEntity);
-
-                try
-                {
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateException dbEx)
-                {
-                    Console.WriteLine($"Database update error: {dbEx.Message}");
-
-                    if (dbEx.InnerException != null)
-                    {
-                        Console.WriteLine($"Inner Exception: {dbEx.InnerException.Message}");
-                    }
-
-                    return 0;
-                }
+                await _context.SaveChangesAsync();
 
                 string filepath = Path.Combine(folder, uniqueFileName);
 
@@ -130,16 +76,13 @@ namespace CMS.API.Repositories
                 {
                     await eventEntity.Image.CopyToAsync(fileStream);
                 }
-
                 Console.WriteLine("Uploaded");
-                return eventEntity.Id;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
-                return 0;
             }
+            return eventEntity.Id;
         }
-
     }
 }

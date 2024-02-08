@@ -14,9 +14,9 @@ namespace CMS.API.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<ApplicationSettings>> GetApplicationSettings()
+        public async Task<ApplicationSettings> GetApplicationSettings()
         {
-            return await _context.ApplicationSettings.ToListAsync();
+            return await _context.ApplicationSettings.FirstOrDefaultAsync();
         }
 
         public async Task<int> CreateApplicationSettings(ApplicationSettings applicationSettings)
@@ -30,7 +30,7 @@ namespace CMS.API.Repositories
             var existingEntity = await _context.ApplicationSettings.FindAsync(applicationSettings.Id);
 
             if (existingEntity == null)
-                return 0;
+                return 0; 
 
             _context.Entry(existingEntity).CurrentValues.SetValues(applicationSettings);
             return await _context.SaveChangesAsync();
@@ -45,6 +45,11 @@ namespace CMS.API.Repositories
 
             _context.ApplicationSettings.Remove(existingEntity);
             return await _context.SaveChangesAsync();
+        }
+
+        Task<IEnumerable<ApplicationSettings>> IApplicationSettingsRepository.GetApplicationSettings()
+        {
+            throw new NotImplementedException();
         }
     }
 }

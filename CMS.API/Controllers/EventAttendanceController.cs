@@ -1,6 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using CMS.API.Contracts;
+﻿using AutoMapper;
+using CMS.API.DTOs;
 using CMS.API.Entities;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CMS.API.Controllers
 {
@@ -8,93 +13,111 @@ namespace CMS.API.Controllers
     [ApiController]
     public class EventAttendanceController : ControllerBase
     {
-        private readonly IEventAttendanceRepository _eventAttendanceRepository;
-
-        public EventAttendanceController(IEventAttendanceRepository eventAttendanceRepository)
+        private static List<EventAttendance> eventAttendances = new List<EventAttendance>
         {
-            _eventAttendanceRepository = eventAttendanceRepository ?? throw new ArgumentNullException(nameof(eventAttendanceRepository));
+            new EventAttendance
+            {
+                Id = 1,
+                UserId = 101,
+                PlannerId = 201,
+                RegistrationDate = DateTime.Now.AddDays(-10),
+                HasAttended = true
+            },
+            new EventAttendance
+            {
+                Id = 2,
+                UserId = 102,
+                PlannerId = 202,
+                RegistrationDate = DateTime.Now.AddDays(-8),
+                HasAttended = false
+            },
+            new EventAttendance
+            {
+                Id = 3,
+                UserId = 103,
+                PlannerId = 203,
+                RegistrationDate = DateTime.Now.AddDays(-6),
+                HasAttended = true
+            },
+            new EventAttendance
+            {
+                Id = 4,
+                UserId = 104,
+                PlannerId = 204,
+                RegistrationDate = DateTime.Now.AddDays(-4),
+                HasAttended = false
+            },
+            new EventAttendance
+            {
+                Id = 5,
+                UserId = 105,
+                PlannerId = 205,
+                RegistrationDate = DateTime.Now.AddDays(-2),
+                HasAttended = true
+            }
+        };
+
+
+        private readonly IMapper _mapper;
+
+        public EventAttendanceController(IMapper mapper)
+        {
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EventAttendance>>> GetEventAttendances()
+        public IActionResult GetEventAttendance()
         {
-            try
-            {
-                var eventAttendances = await _eventAttendanceRepository.GetEventAttendances();
-                return Ok(eventAttendances);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
-            }
+            var eventAttendDTOs = _mapper.Map<IEnumerable<EventAttendanceDTO>>(eventAttendances);
+            return Ok(eventAttendDTOs);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<EventAttendance>> GetEventAttendanceById(int id)
+        public IActionResult GetEventAttendanceById(int id)
         {
-            try
-            {
-                var eventAttendance = await _eventAttendanceRepository.GetEventAttendanceById(id);
+            var eventAttendance = eventAttendances.FirstOrDefault(e => e.Id == id);
+            if (eventAttendance == null)
+                return NotFound();
 
-                if (eventAttendance == null)
-                    return NotFound();
-
-                return Ok(eventAttendance);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
-            }
+            var eventAttendanceDTO = _mapper.Map<EventAttendanceDTO>(eventAttendance);
+            return Ok(eventAttendanceDTO);
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> CreateEventAttendance([FromBody] EventAttendance eventAttendance)
+        public IActionResult CreateEventAttendance(EventAttendanceDTO eventAttendanceDTO)
         {
-            try
-            {
-                var result = await _eventAttendanceRepository.CreateEventAttendance(eventAttendance);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
-            }
+            var eventAttendance = _mapper.Map<EventAttendance>(eventAttendanceDTO);
+            eventAttendance.Id = eventAttendances.Count + 1; 
+            eventAttendance.RegistrationDate = DateTime.Now; 
+            eventAttendances.Add(eventAttendance);
+            var createdEventAttendanceDTO = _mapper.Map<EventAttendanceDTO>(eventAttendance);
+            return Ok(createdEventAttendanceDTO);
         }
 
-        [HttpPut]
-        public async Task<ActionResult<int>> UpdateEventAttendance([FromBody] EventAttendance eventAttendance)
+        [HttpPut("{id}")]
+        public IActionResult UpdateEventAttendance(int id, EventAttendanceDTO eventAttendanceDTO)
         {
-            try
-            {
-                var result = await _eventAttendanceRepository.UpdateEventAttendance(eventAttendance);
+            var eventAttendance = eventAttendances.FirstOrDefault(e => e.Id == id);
+            if (eventAttendance == null)
+                return NotFound();
 
-                if (result == 0)
-                    return NotFound();
+            eventAttendance.UserId = eventAttendanceDTO.UserId;
+            eventAttendance.PlannerId = eventAttendanceDTO.PlannerId;
+            eventAttendance.HasAttended = eventAttendanceDTO.HasAttended;
 
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
-            }
+            var updatedEventAttendanceDTO = _mapper.Map<EventAttendanceDTO>(eventAttendance);
+            return Ok(updatedEventAttendanceDTO);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<int>> DeleteEventAttendance(int id)
+        public IActionResult DeleteEventAttendance(int id)
         {
-            try
-            {
-                var result = await _eventAttendanceRepository.DeleteEventAttendance(id);
+            var eventAttendance = eventAttendances.FirstOrDefault(e => e.Id == id);
+            if (eventAttendance == null)
+                return NotFound();
 
-                if (result == 0)
-                    return NotFound();
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
-            }
+            eventAttendances.Remove(eventAttendance);
+            return Ok();
         }
     }
 }

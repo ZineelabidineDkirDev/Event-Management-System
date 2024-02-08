@@ -7,12 +7,14 @@ import Navigation from "./components/Navigation/Navigation";
 // import HomeFour from "./components/pages/HomeFour";
 import HomeFive from "./components/pages/HomeFive";
 import AboutOne from "./components/pages/AboutOne";
-import AboutTwo from "./components/pages/AboutTwo";
+import EventDetail from "./components/pages/AboutTwo";
 import AboutThree from "./components/pages/AboutThree";
 import PricingOne from "./components/pages/PricingOne";
+import Profile from './components/Profile'
 import PricingTwo from "./components/pages/PricingTwo";
 import SpeakersOne from "./components/pages/SpeakersOne";
 import Dashboard from "./dashboard/Dashboard";
+import EventHistory from "./components/Speakers/EventHistory"
 // import SpeakersTwo from "./components/pages/SpeakersTwo";
 // import SpeakersThree from "./components/pages/SpeakersThree";
 import ScheduleOne from "./components/pages/ScheduleOne";
@@ -56,11 +58,13 @@ const AppRouter = () => {
                     <Route path="/home-four" exact component={HomeFour} /> */}
                     <Route path="/" exact component={HomeFive} />
                     <Route path="/about-1" exact component={AboutOne} />
-                    <Route path="/about-2" exact component={AboutTwo} />
-                    <Route path="/about-3/:id" exact component={AboutThree} />
+                    <Route path="/event-detail/:eventId" exact component={EventDetail} />
+                    <Route path="/speaker-detail/:id" exact component={AboutThree} />
                     <Route path="/pricing-1" exact component={PricingOne} />
                     <Route path="/pricing-2" exact component={PricingTwo} />
                     <Route path="/speakers-1" exact component={SpeakersOne} />
+                    <Route path="/event-history" exact component={EventHistory} />
+                    <Route path="/profile" exact component={Profile} />
                     {/* <Route path="/speakers-2" exact component={SpeakersTwo} />
                     <Route path="/speakers-3" exact component={SpeakersThree} /> */}
                     <Route path="/schedule-1" exact component={ScheduleOne} />

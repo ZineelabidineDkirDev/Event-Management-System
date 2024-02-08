@@ -19,9 +19,9 @@ namespace CMS.API.Repositories
             return await _context.PlannerSpeakers.ToListAsync();
         }
 
-        public async Task<PlannerSpeaker> GetPlannerSpeakerById(int id)
+        public async Task<List<PlannerSpeaker>> GetPlannerSpeakerById(int id)
         {
-            return await _context.PlannerSpeakers.FindAsync(id);
+            return await _context.PlannerSpeakers.Where(ps => ps.PlannerId == id).ToListAsync();
         }
 
         public async Task<int> CreatePlannerSpeaker(PlannerSpeaker plannerSpeaker)

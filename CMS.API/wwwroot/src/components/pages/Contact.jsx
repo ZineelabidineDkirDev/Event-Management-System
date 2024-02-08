@@ -92,7 +92,7 @@ class Contact extends React.Component {
             <React.Fragment>
                 <div className="page-title-area item-bg1">
                     <div className="container">
-                        <h1>Contact Us</h1>
+                        <h1>Contact</h1>
                         <span>Send me your Message</span>
                         <ul>
                             <li><Link to="/">Home</Link></li>
@@ -104,7 +104,7 @@ class Contact extends React.Component {
                 <section className="contact-area ptb-120">
                     <div className="container">
                         <div className="row">
-                            <div className="col-lg-4 col-md-6">
+                            {/* <div className="col-lg-4 col-md-6 overflow">
                                 <div className="contact-box">
                                     <div className="icon">
                                         <i className="icofont-phone"></i>
@@ -117,8 +117,8 @@ class Contact extends React.Component {
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div className="col-lg-4 col-md-6">
+                             */}
+                            {/* <div className="col-lg-4 col-md-6">
                                 <div className="contact-box">
                                     <div className="icon">
                                         <i className="icofont-email"></i>
@@ -143,7 +143,7 @@ class Contact extends React.Component {
                                         <p>2750 Quadra Street Victoria, City, Canada</p>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
 
                         <div className="row h-100 align-items-center contact-form">

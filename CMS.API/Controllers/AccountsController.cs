@@ -1,7 +1,6 @@
 ﻿using CMS.API.Authorization;
 using CMS.API.Contracts;
 using CMS.API.Entities;
-using CMS.API.Helpers;
 using CMS.API.Models.Accounts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -60,15 +59,25 @@ namespace CMS.API.Controllers
         [HttpPost("register")]
         public IActionResult Register(RegisterRequest model)
         {
-            _accountService.Register(model, Request.Headers["origin"]!);
-            return Ok(new { message = "Registration successful, please check your email for verification instructions" });
+            var registerResult = _accountService.Register(model, Request.Headers["origin"]!);
+
+            if (registerResult)
+            {
+                return Ok(new { message = "Registration successful, please check your email for verification instructions" });
+
+            }
+            else
+            {
+                return Ok(new { message = "Your Email is already exist" });
+
+            }
         }
 
         [AllowAnonymous]
         [HttpPost("verify-email")]
         public IActionResult VerifyEmail(VerifyEmailRequest model)
         {
-            _accountService.VerifyEmail(model.Token);
+            _accountService.VerifyEmail(model.Token); 
             return Ok(new { message = "Verification successful, you can now login" });
         }
 
@@ -84,7 +93,7 @@ namespace CMS.API.Controllers
         [HttpPost("validate-reset-token")]
         public IActionResult ValidateResetToken(ValidateResetTokenRequest model)
         {
-            _accountService.ValidateResetToken(model!);
+            _accountService.ValidateResetToken(model!); 
             return Ok(new { message = "Token is valid" });
         }
 
@@ -92,7 +101,7 @@ namespace CMS.API.Controllers
         [HttpPost("reset-password")]
         public IActionResult ResetPassword(ResetPasswordRequest model)
         {
-            _accountService.ResetPassword(model!);
+            _accountService.ResetPassword(model!); 
             return Ok(new { message = "Password reset successful, you can now login" });
         }
 
@@ -145,51 +154,6 @@ namespace CMS.API.Controllers
             return Ok(new { message = "Account deleted successfully" });
         }
 
-        [Authorize(Role.Admin)]
-        [HttpPut("assign-role/{id}")]
-        public IActionResult AssignRole(int id)
-        {
-            try
-            {
-                var account = _accountService.AssignRole(id);
-                return Ok(account);
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
-            catch (AppException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Internal Server Error" });
-            }
-        }
-
-        [Authorize(Role.Admin)]
-        [HttpPut("unassign-role/{id}")]
-        public IActionResult UnassignRole(int id)
-        {
-            try
-            {
-                var account = _accountService.UnassignRole(id);
-                return Ok(account);
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
-            catch (AppException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Internal Server Error" });
-            }
-        }
 
         private void setTokenCookie(string token)
         {

@@ -79,12 +79,7 @@ class WhyUs extends React.Component {
                     </div>
                 </div>
 
-                <ul className='slideshow'>
-                    <li><span></span></li>
-                    <li><span></span></li>
-                    <li><span></span></li>
-                    <li><span></span></li>
-                </ul>
+                
             </section>
         );
     }

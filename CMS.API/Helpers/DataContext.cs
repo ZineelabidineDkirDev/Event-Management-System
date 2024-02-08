@@ -65,9 +65,9 @@ public class DataContext : DbContext
         modelBuilder.Entity<Sponsor>().ToTable("Sponsors");
         modelBuilder.Entity<SponsorEvent>().ToTable("SponsorEvents");
         modelBuilder.Entity<EventAttendance>()
-            .HasOne(ea => ea.Event)
+            .HasOne(ea => ea.Planner)
             .WithMany(e => e.Attendances)
-            .HasForeignKey(ea => ea.EventId)
+            .HasForeignKey(ea => ea.PlannerId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }
